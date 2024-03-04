@@ -25,3 +25,13 @@ func UserRegisterToEntity(ur UserRegister) entity.User {
 		Password: ur.Password,
 	}
 }
+
+type UserLoginResponse struct {
+	Token string `json:"token"`
+}
+
+type GetUserParam struct {
+	ID       uuid.UUID `json:"-"`
+	Email    string    `json:"-"`
+	Password string    `json:"-"`
+}

@@ -7,6 +7,8 @@ import (
 	"github.com/Syahreza-Ferdian/heal-in/pkg/bcrypt"
 	"github.com/Syahreza-Ferdian/heal-in/pkg/config"
 	"github.com/Syahreza-Ferdian/heal-in/pkg/database/mysql"
+	"github.com/Syahreza-Ferdian/heal-in/pkg/jwt"
+	"github.com/Syahreza-Ferdian/heal-in/pkg/middleware"
 	"github.com/gin-gonic/gin"
 
 	bcrypt_import "golang.org/x/crypto/bcrypt"
@@ -19,11 +21,21 @@ func main() {
 
 	repository := repository.NewRepository(db)
 
+	jwt := jwt.Init()
+
 	bcrypt := bcrypt.NewBcrypt(bcrypt_import.DefaultCost)
 
-	service := service.NewService(service.InitService{Repository: repository, Bcrypt: bcrypt})
+	service := service.NewService(
+		service.InitService{
+			Repository: repository,
+			Bcrypt:     bcrypt,
+			JwtAuth:    jwt,
+		},
+	)
 
-	rest := rest.NewRest(gin.Default(), *service)
+	middleware := middleware.Init(jwt, service)
+
+	rest := rest.NewRest(gin.Default(), service, middleware)
 
 	mysql.Migrate(db)
 
