@@ -1,6 +1,8 @@
 package response
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+)
 
 type Response struct {
 	Status  Status      `json:"status"`
@@ -34,6 +36,19 @@ func OnFailed(c *gin.Context, code int, message string, err error) {
 		},
 		Message: message,
 		Data:    err.Error(),
+	}
+
+	c.JSON(code, responseStr)
+}
+
+func OnErrorValidate(c *gin.Context, code int, message string, data any) {
+	responseStr := Response{
+		Status: Status{
+			Code:      code,
+			IsSuccess: false,
+		},
+		Message: message,
+		Data:    data,
 	}
 
 	c.JSON(code, responseStr)
