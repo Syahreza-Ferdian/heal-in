@@ -33,7 +33,7 @@ func (r *Rest) CreateUser(c *gin.Context) {
 	}
 
 	// user service call
-	emailData, err := r.service.UserService.Register(userRequest)
+	newUser, emailData, err := r.service.UserService.Register(userRequest)
 
 	if err != nil {
 		if strings.Contains(err.Error(), "Error 1062") {
@@ -45,7 +45,13 @@ func (r *Rest) CreateUser(c *gin.Context) {
 		return
 	}
 
-	r.mail.SendEmail(&userRequest, &emailData)
+	err = r.mail.SendEmail(&userRequest, &emailData)
+
+	if err != nil {
+		response.OnFailed(c, http.StatusInternalServerError, "Gagal mengirim email verifikasi, silakan coba register kembali", err)
+		r.service.UserService.DeleteUser(&newUser)
+		return
+	}
 
 	response.OnSuccess(c, http.StatusCreated, "Berhasil registrasi user, silakan cek email untuk verifikasi", nil)
 }

@@ -15,10 +15,11 @@ import (
 )
 
 type InterfaceUserService interface {
-	Register(userReq model.UserRegister) (email.EmailData, error)
+	Register(userReq model.UserRegister) (entity.User, email.EmailData, error)
 	Login(userReq model.UserLogin) (model.UserLoginResponse, error)
 	GetUser(param *model.GetUserParam) (*entity.User, error)
 	Verify(verifCode string) error
+	DeleteUser(user *entity.User) error
 }
 
 type UserService struct {
@@ -35,11 +36,12 @@ func NewUserService(ur repository.InterfaceUserRepository, bcrypt bcrypt.BcryptI
 	}
 }
 
-func (us *UserService) Register(userReq model.UserRegister) (email.EmailData, error) {
+// TODO : Register nge return entity.User, email.EmailData, error
+func (us *UserService) Register(userReq model.UserRegister) (entity.User, email.EmailData, error) {
 	hashPassword, err := us.bcrypt.HashPassword(userReq.Password)
 
 	if err != nil {
-		return email.EmailData{}, err
+		return entity.User{}, email.EmailData{}, err
 	}
 
 	userReq.ID = uuid.New()
@@ -56,15 +58,16 @@ func (us *UserService) Register(userReq model.UserRegister) (email.EmailData, er
 	_, err = us.ur.CreateUser(&user)
 
 	if err != nil {
-		return email.EmailData{}, err
+		return entity.User{}, email.EmailData{}, err
 	}
 
-	return email.EmailData{
-		RedirectURL: fmt.Sprintf("%s/api/user/email/verify/%s", os.Getenv("APP_URL"), verificationCode),
-		FirstName:   user.Name,
-		Subject:     "Verifikasi Email Anda",
-		WebURL:      os.Getenv("APP_URL"),
-	}, nil
+	return user,
+		email.EmailData{
+			RedirectURL: fmt.Sprintf("%s/api/user/email/verify/%s", os.Getenv("APP_URL"), verificationCode),
+			FirstName:   user.Name,
+			Subject:     "Verifikasi Email Anda",
+			WebURL:      os.Getenv("APP_URL"),
+		}, nil
 }
 
 func (us *UserService) Login(userReq model.UserLogin) (model.UserLoginResponse, error) {
@@ -105,6 +108,10 @@ func (us *UserService) GetUser(param *model.GetUserParam) (*entity.User, error) 
 func (us *UserService) Verify(verifCode string) error {
 	user, err := us.ur.GetUserColoumn("verification_code", verifCode)
 
+	if user.IsEmailVerified {
+		return fmt.Errorf("email sudah terverifikasi")
+	}
+
 	if err != nil {
 		return err
 	}
@@ -118,4 +125,8 @@ func (us *UserService) Verify(verifCode string) error {
 	}
 
 	return nil
+}
+
+func (us *UserService) DeleteUser(user *entity.User) error {
+	return us.ur.DeleteUser(*user)
 }

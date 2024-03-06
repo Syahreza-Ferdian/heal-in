@@ -11,6 +11,7 @@ type InterfaceUserRepository interface {
 	GetUser(param *model.GetUserParam) (*entity.User, error)
 	GetUserColoumn(colName string, value string) (*entity.User, error)
 	UpdateUserData(updatedUser *entity.User) error
+	DeleteUser(user entity.User) error
 }
 
 type UserRepository struct {
@@ -46,7 +47,7 @@ func (ur *UserRepository) GetUser(param *model.GetUserParam) (*entity.User, erro
 
 func (ur *UserRepository) GetUserColoumn(colName string, value string) (*entity.User, error) {
 	var user entity.User
-	err := ur.db.Debug().Where(colName + " = ?", value).First(&user).Error
+	err := ur.db.Debug().Where(colName+" = ?", value).First(&user).Error
 
 	if err != nil {
 		return nil, err
@@ -57,6 +58,12 @@ func (ur *UserRepository) GetUserColoumn(colName string, value string) (*entity.
 
 func (ur *UserRepository) UpdateUserData(updatedUser *entity.User) error {
 	err := ur.db.Debug().Save(updatedUser).Error
+
+	return err
+}
+
+func (ur *UserRepository) DeleteUser(user entity.User) error {
+	err := ur.db.Debug().Delete(user).Error
 
 	return err
 }

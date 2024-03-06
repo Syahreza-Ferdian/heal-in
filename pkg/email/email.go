@@ -14,7 +14,7 @@ import (
 )
 
 type EmailService interface {
-	SendEmail(user *model.UserRegister, data *EmailData)
+	SendEmail(user *model.UserRegister, data *EmailData) error
 }
 
 type EmailSender struct {
@@ -38,7 +38,7 @@ func NewEmailSender(name, fromEmail, password string) EmailService {
 	}
 }
 
-func (e *EmailSender) SendEmail(user *model.UserRegister, data *EmailData) {
+func (e *EmailSender) SendEmail(user *model.UserRegister, data *EmailData) error {
 	serverPort, _ := strconv.Atoi(os.Getenv("SMTP_PORT"))
 
 	// parse template
@@ -53,11 +53,6 @@ func (e *EmailSender) SendEmail(user *model.UserRegister, data *EmailData) {
 	// execute the template and write it to the buffer
 	tmpl.ExecuteTemplate(&body, "base.html", &data)
 
-	// send email
-	// err = smtp.SendMail(ServerAddress,
-	// 	smtp.PlainAuth("", e.Name, e.Password, AuthAddress),
-	// 	e.FromEmail, []string{user.Email}, []byte(body.String()))
-
 	m := gomail.NewMessage()
 	m.SetHeader("From", e.FromEmail)
 	m.SetHeader("To", user.Email)
@@ -70,8 +65,10 @@ func (e *EmailSender) SendEmail(user *model.UserRegister, data *EmailData) {
 
 	err = dialer.DialAndSend(m)
 	if err != nil {
-		panic(err)
+		return err
 	}
+
+	return nil
 }
 
 func ParseTemplateDir(dir string) (*template.Template, error) {
