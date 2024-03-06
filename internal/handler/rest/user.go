@@ -33,7 +33,8 @@ func (r *Rest) CreateUser(c *gin.Context) {
 	}
 
 	// user service call
-	err = r.service.UserService.Register(userRequest)
+	emailData, err := r.service.UserService.Register(userRequest)
+
 	if err != nil {
 		if strings.Contains(err.Error(), "Error 1062") {
 			// error handling: email sudah terdaftar tapi dipake buat register lagi
@@ -44,7 +45,9 @@ func (r *Rest) CreateUser(c *gin.Context) {
 		return
 	}
 
-	response.OnSuccess(c, http.StatusCreated, "Berhasil registrasi user", nil)
+	r.mail.SendEmail(&userRequest, &emailData)
+
+	response.OnSuccess(c, http.StatusCreated, "Berhasil registrasi user, silakan cek email untuk verifikasi", nil)
 }
 
 func (r *Rest) Login(c *gin.Context) {
@@ -85,4 +88,17 @@ func (r *Rest) Login(c *gin.Context) {
 	}
 
 	response.OnSuccess(c, http.StatusOK, "Berhasil login ke sistem", token)
+}
+
+func (r *Rest) VerifyEmail(c *gin.Context) {
+	verificationCode := c.Param("verificationCode")
+
+	err := r.service.UserService.Verify(verificationCode)
+
+	if err != nil {
+		response.OnFailed(c, http.StatusBadRequest, "Gagal verifikasi email", err)
+		return
+	}
+
+	response.OnSuccess(c, http.StatusOK, "Berhasil verifikasi email", nil)
 }

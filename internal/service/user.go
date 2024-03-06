@@ -1,18 +1,24 @@
 package service
 
 import (
+	"fmt"
+	"os"
+
 	"github.com/Syahreza-Ferdian/heal-in/entity"
 	"github.com/Syahreza-Ferdian/heal-in/internal/repository"
 	"github.com/Syahreza-Ferdian/heal-in/model"
 	"github.com/Syahreza-Ferdian/heal-in/pkg/bcrypt"
+	"github.com/Syahreza-Ferdian/heal-in/pkg/email"
 	"github.com/Syahreza-Ferdian/heal-in/pkg/jwt"
+	"github.com/Syahreza-Ferdian/heal-in/pkg/random"
 	"github.com/google/uuid"
 )
 
 type InterfaceUserService interface {
-	Register(userReq model.UserRegister) error
+	Register(userReq model.UserRegister) (email.EmailData, error)
 	Login(userReq model.UserLogin) (model.UserLoginResponse, error)
 	GetUser(param *model.GetUserParam) (*entity.User, error)
+	Verify(verifCode string) error
 }
 
 type UserService struct {
@@ -29,11 +35,11 @@ func NewUserService(ur repository.InterfaceUserRepository, bcrypt bcrypt.BcryptI
 	}
 }
 
-func (us *UserService) Register(userReq model.UserRegister) error {
+func (us *UserService) Register(userReq model.UserRegister) (email.EmailData, error) {
 	hashPassword, err := us.bcrypt.HashPassword(userReq.Password)
 
 	if err != nil {
-		return err
+		return email.EmailData{}, err
 	}
 
 	userReq.ID = uuid.New()
@@ -41,11 +47,24 @@ func (us *UserService) Register(userReq model.UserRegister) error {
 
 	user := model.UserRegisterToEntity(userReq)
 
+	verificationCode, _ := random.GenerateRandomString(10)
+
+	// EMAIL
+
+	user.VerificationCode = verificationCode
+
 	_, err = us.ur.CreateUser(&user)
+
 	if err != nil {
-		return err
+		return email.EmailData{}, err
 	}
-	return nil
+
+	return email.EmailData{
+		RedirectURL: fmt.Sprintf("%s/api/user/email/verify/%s", os.Getenv("APP_URL"), verificationCode),
+		FirstName:   user.Name,
+		Subject:     "Verifikasi Email Anda",
+		WebURL:      os.Getenv("APP_URL"),
+	}, nil
 }
 
 func (us *UserService) Login(userReq model.UserLogin) (model.UserLoginResponse, error) {
@@ -57,6 +76,10 @@ func (us *UserService) Login(userReq model.UserLogin) (model.UserLoginResponse, 
 
 	if err != nil {
 		return result, err
+	}
+
+	if !user.IsEmailVerified {
+		return result, fmt.Errorf("email belum terverifikasi. silakan cek email anda untuk verifikasi")
 	}
 
 	err = us.bcrypt.ComparePassword(user.Password, userReq.Password)
@@ -77,4 +100,22 @@ func (us *UserService) Login(userReq model.UserLogin) (model.UserLoginResponse, 
 
 func (us *UserService) GetUser(param *model.GetUserParam) (*entity.User, error) {
 	return us.ur.GetUser(param)
+}
+
+func (us *UserService) Verify(verifCode string) error {
+	user, err := us.ur.GetUserColoumn("verification_code", verifCode)
+
+	if err != nil {
+		return err
+	}
+
+	user.IsEmailVerified = true
+
+	err = us.ur.UpdateUserData(user)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

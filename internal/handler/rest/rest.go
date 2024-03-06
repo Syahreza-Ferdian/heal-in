@@ -8,6 +8,7 @@ import (
 
 	"github.com/Syahreza-Ferdian/heal-in/entity"
 	"github.com/Syahreza-Ferdian/heal-in/internal/service"
+	"github.com/Syahreza-Ferdian/heal-in/pkg/email"
 	"github.com/Syahreza-Ferdian/heal-in/pkg/middleware"
 	"github.com/Syahreza-Ferdian/heal-in/pkg/web/response"
 	"github.com/gin-gonic/gin"
@@ -17,13 +18,15 @@ type Rest struct {
 	router     *gin.Engine
 	service    *service.Service
 	middleware middleware.MiddlewareInterface
+	mail       email.EmailService
 }
 
-func NewRest(router *gin.Engine, service *service.Service, middleware middleware.MiddlewareInterface) *Rest {
+func NewRest(router *gin.Engine, service *service.Service, middleware middleware.MiddlewareInterface, mail email.EmailService) *Rest {
 	return &Rest{
 		router:     router,
 		service:    service,
 		middleware: middleware,
+		mail:       mail,
 	}
 }
 
@@ -34,6 +37,7 @@ func (r *Rest) EndPoint() {
 	user.POST("/register", r.CreateUser)
 	user.POST("/login", r.Login)
 	user.GET("/login-user", r.middleware.AuthenticateUser, Testing)
+	user.GET("/email/verify/:verificationCode", r.VerifyEmail)
 }
 
 func (r *Rest) Start() {
