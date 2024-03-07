@@ -15,4 +15,5 @@ type User struct {
 	UpdatedAt        time.Time `json:"updated_at" gorm:"autoUpdateTime"`
 	IsEmailVerified  bool      `json:"is_email_verified" gorm:"default:false"`
 	VerificationCode string    `json:"-" gorm:"type:varchar(255)"`
+	IsSubscribed     bool      `json:"is_subscribed" gorm:"default:false"`
 }

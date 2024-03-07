@@ -38,6 +38,10 @@ func (r *Rest) EndPoint() {
 	user.POST("/login", r.Login)
 	user.GET("/login-user", r.middleware.AuthenticateUser, Testing)
 	user.GET("/email/verify/:verificationCode", r.VerifyEmail)
+
+	payment := mainRouterGroup.Group("/payment")
+	payment.POST("/new", r.middleware.AuthenticateUser, r.NewPayment)
+	payment.POST("/notification", r.PaymentNotification)
 }
 
 func (r *Rest) Start() {
