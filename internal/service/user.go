@@ -117,6 +117,7 @@ func (us *UserService) Verify(verifCode string) error {
 	}
 
 	user.IsEmailVerified = true
+	user.VerificationCode = ""
 
 	err = us.ur.UpdateUserData(user)
 
