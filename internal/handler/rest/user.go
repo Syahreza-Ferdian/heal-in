@@ -102,6 +102,11 @@ func (r *Rest) VerifyEmail(c *gin.Context) {
 	err := r.service.UserService.Verify(verificationCode)
 
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			response.OnFailed(c, http.StatusBadRequest, "Gagal verifikasi email", fmt.Errorf("kode verifikasi tidak valid"))
+			return
+		}
+
 		response.OnFailed(c, http.StatusBadRequest, "Gagal verifikasi email", err)
 		return
 	}

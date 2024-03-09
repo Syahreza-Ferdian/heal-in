@@ -5,7 +5,10 @@ go 1.22.0
 require gorm.io/driver/mysql v1.5.4
 
 require (
+	github.com/adityarizkyramadhan/supabase-storage-uploader v1.0.0 // indirect
+	github.com/fatih/color v1.15.0 // indirect
 	github.com/k3a/html2text v1.2.1 // indirect
+	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/midtrans/midtrans-go v1.3.7 // indirect
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
 	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df // indirect

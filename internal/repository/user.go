@@ -12,6 +12,7 @@ type InterfaceUserRepository interface {
 	GetUserColoumn(colName string, value string) (*entity.User, error)
 	UpdateUserData(updatedUser *entity.User) error
 	DeleteUser(user entity.User) error
+	GetUserSubscriptionStatus(userID string) (int, error)
 }
 
 type UserRepository struct {
@@ -66,4 +67,24 @@ func (ur *UserRepository) DeleteUser(user entity.User) error {
 	err := ur.db.Debug().Delete(user).Error
 
 	return err
+}
+
+func (ur *UserRepository) GetUserSubscriptionStatus(userID string) (int, error) {
+	var user entity.User
+
+	var subscribtionStatus int
+
+	err := ur.db.Debug().Where("id = ?", userID).First(&user).Error
+
+	if user.IsSubscribed {
+		subscribtionStatus = 1
+	} else {
+		subscribtionStatus = 0
+	}
+
+	if err != nil {
+		return subscribtionStatus, err
+	}
+
+	return subscribtionStatus, nil
 }

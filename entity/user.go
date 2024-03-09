@@ -16,4 +16,5 @@ type User struct {
 	IsEmailVerified  bool      `json:"is_email_verified" gorm:"default:false"`
 	VerificationCode string    `json:"-" gorm:"type:varchar(255)"`
 	IsSubscribed     bool      `json:"is_subscribed" gorm:"default:false"`
+	Payment          []Payment `json:"payments"`
 }

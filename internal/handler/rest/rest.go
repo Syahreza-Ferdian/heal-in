@@ -42,6 +42,12 @@ func (r *Rest) EndPoint() {
 	payment := mainRouterGroup.Group("/payment")
 	payment.POST("/new", r.middleware.AuthenticateUser, r.NewPayment)
 	payment.POST("/notification", r.PaymentNotification)
+
+	artikel := mainRouterGroup.Group("/artikel")
+	artikel.POST("/new", r.NewArtikel)
+	artikel.GET("/:id", r.GetArtikel)
+	artikel.GET("/all", r.middleware.AuthenticateUser, r.GetAllArtikel)
+	artikel.GET("/sample", r.GetFewSampleArtikel)
 }
 
 func (r *Rest) Start() {

@@ -108,12 +108,12 @@ func (us *UserService) GetUser(param *model.GetUserParam) (*entity.User, error) 
 func (us *UserService) Verify(verifCode string) error {
 	user, err := us.ur.GetUserColoumn("verification_code", verifCode)
 
-	if user.IsEmailVerified {
-		return fmt.Errorf("email sudah terverifikasi")
-	}
-
 	if err != nil {
 		return err
+	}
+
+	if user.IsEmailVerified {
+		return fmt.Errorf("email sudah terverifikasi")
 	}
 
 	user.IsEmailVerified = true

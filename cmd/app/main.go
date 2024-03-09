@@ -12,6 +12,7 @@ import (
 	"github.com/Syahreza-Ferdian/heal-in/pkg/email"
 	"github.com/Syahreza-Ferdian/heal-in/pkg/jwt"
 	"github.com/Syahreza-Ferdian/heal-in/pkg/middleware"
+	"github.com/Syahreza-Ferdian/heal-in/pkg/supabase"
 	"github.com/gin-gonic/gin"
 	"github.com/midtrans/midtrans-go"
 	"github.com/midtrans/midtrans-go/coreapi"
@@ -37,7 +38,9 @@ func main() {
 
 	midtransCoreApi := coreapi.Client{}
 
-	midtransCoreApi.New(os.Getenv("MIDTRANS_SERVER_KEY"), midtrans.Production)
+	midtransCoreApi.New(os.Getenv("MIDTRANS_SERVER_KEY"), midtrans.Sandbox)
+
+	supabase := supabase.Init()
 
 	service := service.NewService(
 		service.InitService{
@@ -46,6 +49,7 @@ func main() {
 			JwtAuth:    jwt,
 			SnapClient: midtransSnapApi,
 			CoreApi:    midtransCoreApi,
+			Supabase:   supabase,
 		},
 	)
 
