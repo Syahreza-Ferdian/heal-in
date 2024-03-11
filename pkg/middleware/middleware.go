@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"errors"
+	"net/http"
 	"strings"
 
 	"github.com/Syahreza-Ferdian/heal-in/internal/service"
@@ -13,6 +14,7 @@ import (
 
 type MiddlewareInterface interface {
 	AuthenticateUser(ctx *gin.Context)
+	Cors(c *gin.Context)
 }
 
 type Middleware struct {
@@ -55,4 +57,19 @@ func (m *Middleware) AuthenticateUser(ctx *gin.Context) {
 	ctx.Set("user", user)
 
 	ctx.Next()
+}
+
+func (m *Middleware) Cors(c *gin.Context) {
+	c.Header("Access-Control-Allow-Origin", "*")
+	c.Header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+	c.Header("Access-Control-Allow-Headers", "Content-Type, Authorization")
+	c.Header("Access-Control-Expose-Headers", "Content-Length, Content-Type, Content-Disposition")
+	c.Header("Access-Control-Allow-Credentials", "true")
+	c.Header("Access-Control-Max-Age", "12h")
+
+	if c.Request.Method != "OPTIONS" {
+		c.Next()
+	} else {
+		c.AbortWithStatus(http.StatusOK)
+	}
 }

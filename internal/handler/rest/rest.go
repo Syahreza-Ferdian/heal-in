@@ -31,6 +31,8 @@ func NewRest(router *gin.Engine, service *service.Service, middleware middleware
 }
 
 func (r *Rest) EndPoint() {
+	r.router.Use(r.middleware.Cors)
+
 	mainRouterGroup := r.router.Group("/api")
 
 	user := mainRouterGroup.Group("/user")
