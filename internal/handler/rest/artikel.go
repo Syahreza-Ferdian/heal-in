@@ -3,9 +3,11 @@ package rest
 import (
 	"net/http"
 
+	"github.com/Syahreza-Ferdian/heal-in/entity"
 	"github.com/Syahreza-Ferdian/heal-in/model"
 	"github.com/Syahreza-Ferdian/heal-in/pkg/web/response"
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 func (r *Rest) NewArtikel(ctx *gin.Context) {
@@ -62,7 +64,18 @@ func (r *Rest) GetArtikel(ctx *gin.Context) {
 }
 
 func (r *Rest) GetAllArtikel(ctx *gin.Context) {
-	artikels, err := r.service.ArtikelService.GetAllArtikel(ctx)
+	currUser, ada := ctx.Get("user")
+
+	var userID uuid.UUID
+
+	if !ada {
+		response.OnFailed(ctx, http.StatusUnauthorized, "failed to get user", nil)
+		return
+	} else {
+		userID = currUser.(*entity.User).ID
+	}
+
+	artikels, err := r.service.ArtikelService.GetAllArtikel(userID.String())
 
 	if err != nil {
 		response.OnFailed(ctx, http.StatusInternalServerError, "failed to get artikel", err)

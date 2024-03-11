@@ -1,13 +1,10 @@
 package service
 
 import (
-	"fmt"
-
 	"github.com/Syahreza-Ferdian/heal-in/entity"
 	"github.com/Syahreza-Ferdian/heal-in/internal/repository"
 	"github.com/Syahreza-Ferdian/heal-in/model"
 	"github.com/Syahreza-Ferdian/heal-in/pkg/supabase"
-	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 )
 
@@ -15,7 +12,7 @@ type InterfaceArtikelService interface {
 	NewArtikel(artikelReq model.NewArtikelRequest) (*entity.Artikel, error)
 	GetArtikel(id string) (*entity.Artikel, error)
 	UploadArtikelImage(artikelID string, artikelImageReq model.ArtikelUploadImageParam) error
-	GetAllArtikel(c *gin.Context) ([]*entity.Artikel, error)
+	GetAllArtikel(userID string) ([]*entity.Artikel, error)
 	GetFewSampleArtikel() ([]*entity.Artikel, error)
 }
 
@@ -88,26 +85,15 @@ func (as *ArtikelService) UploadArtikelImage(artikelID string, artikelImageReq m
 	return nil
 }
 
-func (as *ArtikelService) GetAllArtikel(c *gin.Context) ([]*entity.Artikel, error) {
-	currUser, ada := c.Get("user")
-
-	var userID uuid.UUID
+func (as *ArtikelService) GetAllArtikel(userID string) ([]*entity.Artikel, error) {
 	var status int
 	var err error
 
-	if !ada {
-		return nil, fmt.Errorf("failed to get current user")
-	} else {
-		userID = currUser.(*entity.User).ID
-		status, err = as.ur.GetUserSubscriptionStatus(userID.String())
+	status, err = as.ur.GetUserSubscriptionStatus(userID)
 
-		if err != nil {
-			return nil, err
-		}
+	if err != nil {
+		return nil, err
 	}
-
-	fmt.Println(ada)
-	fmt.Println(status)
 
 	var moreContent bool
 
