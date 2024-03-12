@@ -50,6 +50,11 @@ func (r *Rest) EndPoint() {
 	artikel.GET("/:id", r.GetArtikel)
 	artikel.GET("/all", r.middleware.AuthenticateUser, r.GetAllArtikel)
 	artikel.GET("/sample", r.GetFewSampleArtikel)
+
+	video := mainRouterGroup.Group("/video")
+	video.POST("/new", r.NewVideo)
+	video.GET("/all", r.middleware.AuthenticateUser, r.GetAllVideos)
+	video.GET("/:id", r.GetSpecificVideo)
 }
 
 func (r *Rest) Start() {

@@ -20,6 +20,7 @@ func Migrate(db *gorm.DB) {
 		&entity.Payment{},
 		&entity.Artikel{},
 		&entity.ArtikelImage{},
+		&entity.Video{},
 	)
 
 	if err != nil {

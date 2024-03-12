@@ -13,6 +13,7 @@ type Service struct {
 	UserService    InterfaceUserService
 	PaymentService InterfacePaymentService
 	ArtikelService InterfaceArtikelService
+	VideoService   InterfaceVideoService
 }
 
 type InitService struct {
@@ -29,5 +30,6 @@ func NewService(param InitService) *Service {
 		UserService:    NewUserService(param.Repository.UserRepository, param.Bcrypt, param.JwtAuth),
 		PaymentService: NewPaymentService(param.Repository.PaymentRepository, param.SnapClient, param.CoreApi),
 		ArtikelService: NewArtikelService(param.Repository.ArtikelRepository, param.Supabase, param.Repository.ArtikelImageRepository, param.Repository.UserRepository),
+		VideoService:   NewVideoService(param.Repository.VideoRepository, param.Supabase, param.Repository.UserRepository),
 	}
 }

@@ -7,6 +7,7 @@ type Repository struct {
 	PaymentRepository      InterfacePaymentRepository
 	ArtikelRepository      InterfaceArtikelRepository
 	ArtikelImageRepository InterfaceArtikelImageRepository
+	VideoRepository        InterfaceVideoRepository
 }
 
 func NewRepository(db *gorm.DB) *Repository {
@@ -15,5 +16,6 @@ func NewRepository(db *gorm.DB) *Repository {
 		PaymentRepository:      NewPaymentRepository(db),
 		ArtikelRepository:      NewArtikelRepository(db),
 		ArtikelImageRepository: NewArtikelImageRepository(db),
+		VideoRepository:        NewVideoRepository(db),
 	}
 }

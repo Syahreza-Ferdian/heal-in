@@ -2,6 +2,7 @@ package service
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/Syahreza-Ferdian/heal-in/entity"
 	"github.com/Syahreza-Ferdian/heal-in/internal/repository"
@@ -77,6 +78,8 @@ func (ps *PaymentService) NewPayment(paymentReq model.MidtransRequest, c *gin.Co
 		ID:          paymentReq.OrderId,
 		UserID:      currentUser.(*entity.User).ID,
 		Amount:      paymentReq.Amount,
+		Description: paymentReq.Description,
+		ExpiredAt:   time.Now().Add(3 * 30 * 24 * time.Hour),
 		IsCompleted: false,
 	})
 
