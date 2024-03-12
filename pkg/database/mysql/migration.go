@@ -21,6 +21,11 @@ func Migrate(db *gorm.DB) {
 		&entity.Artikel{},
 		&entity.ArtikelImage{},
 		&entity.Video{},
+		&entity.JournalingEntry{},
+		&entity.JournalingQuestion{},
+		&entity.JournalingAnswer{},
+		&entity.JournalingMood{},
+		&entity.AfirmationWord{},
 	)
 
 	if err != nil {
