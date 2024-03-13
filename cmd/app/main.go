@@ -63,7 +63,7 @@ func main() {
 
 	middleware := middleware.Init(jwt, service)
 
-	mail := email.NewEmailSender(os.Getenv("SMTP_USER"), os.Getenv("SMTP_PASS"))
+	mail := email.NewEmailSender(os.Getenv("SMTP_USER"), os.Getenv("SMTP_PASS"), os.Getenv("EMAIL_FROM"))
 
 	rest := rest.NewRest(gin.Default(), service, middleware, mail)
 

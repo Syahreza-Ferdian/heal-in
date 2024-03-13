@@ -17,6 +17,7 @@ type EmailService interface {
 
 type EmailSender struct {
 	Name      string
+	FromEmail string
 	Password  string
 }
 
@@ -27,9 +28,10 @@ type EmailData struct {
 	WebURL      string
 }
 
-func NewEmailSender(name, password string) EmailService {
+func NewEmailSender(name string, password string, fromEmail string) EmailService {
 	return &EmailSender{
 		Name:      name,
+		FromEmail: fromEmail,
 		Password:  password,
 	}
 }
@@ -40,7 +42,7 @@ func (e *EmailSender) SendEmail(user *model.UserRegister, data *EmailData) error
 	body := fmt.Sprintf("<p>Hi, %s</p> <p>Follow this link below to confirm your email address. If you didn't create an account with <a href='%s'>Heal.in</a>, you can safely delete this email.</p> <a href='%s'>Klik</a> <br> <p>You received this email because we received a request for registration for your account. If you didn't request that registration into our service, you can safely delete this email.</p>", data.FirstName, data.WebURL, data.RedirectURL)
 
 	m := gomail.NewMessage()
-	m.SetHeader("From", e.Name)
+	m.SetHeader("From", e.FromEmail)
 	m.SetHeader("To", user.Email)
 	m.SetHeader("Subject", data.Subject)
 	m.SetBody("text/html", body)
