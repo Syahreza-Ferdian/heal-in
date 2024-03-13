@@ -69,6 +69,8 @@ func main() {
 
 	mysql.Migrate(db)
 
+	mysql.SeedData(db)
+
 	rest.EndPoint()
 
 	rest.Start()
