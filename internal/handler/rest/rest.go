@@ -58,7 +58,7 @@ func (r *Rest) EndPoint() {
 }
 
 func (r *Rest) Start() {
-	err := r.router.Run(fmt.Sprintf("%s:%s", os.Getenv("APP_ADDRESS"), os.Getenv("APP_PORT")))
+	err := r.router.Run(fmt.Sprintf(":%s", os.Getenv("PORT")))
 
 	if err != nil {
 		log.Fatalf("Cannot running the server. Error: %v", err)
