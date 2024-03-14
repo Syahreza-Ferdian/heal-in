@@ -55,6 +55,10 @@ func (r *Rest) EndPoint() {
 	video.POST("/new", r.NewVideo)
 	video.GET("/all", r.middleware.AuthenticateUser, r.GetAllVideos)
 	video.GET("/:id", r.GetSpecificVideo)
+
+	journaling := mainRouterGroup.Group("/journaling")
+	journaling.POST("/new", r.middleware.AuthenticateUser, r.NewJournalingEntry)
+	journaling.GET("/:id", r.GetJournalingEntryByID)
 }
 
 func (r *Rest) Start() {
