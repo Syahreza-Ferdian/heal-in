@@ -27,6 +27,7 @@ type JournalingEntryResponse struct {
 	UserID    uuid.UUID                  `json:"user_id"`
 	CreatedAt time.Time                  `json:"created_at"`
 	Answers   []JournalingAnswerResponse `json:"answers"`
+	MoodID    int                        `json:"mood_id"`
 }
 
 type JournalingAnswerResponse struct {

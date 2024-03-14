@@ -99,6 +99,7 @@ func (js *JournalingService) GetJournalingEntryByID(id string) (model.Journaling
 		UserID:    entry.UserID,
 		CreatedAt: entry.CreatedAt,
 		Answers:   answers,
+		MoodID:    entry.Mood,
 	}
 
 	return response, nil
