@@ -14,6 +14,7 @@ type Service struct {
 	PaymentService        InterfacePaymentService
 	ArtikelService        InterfaceArtikelService
 	VideoService          InterfaceVideoService
+	PodcastService        InterfacePodcastService
 	JournalingService     InterfaceJournalingService
 	AfirmationWordService InterfaceAfirmationWordService
 }
@@ -33,6 +34,7 @@ func NewService(param InitService) *Service {
 		PaymentService:        NewPaymentService(param.Repository.PaymentRepository, param.SnapClient, param.CoreApi),
 		ArtikelService:        NewArtikelService(param.Repository.ArtikelRepository, param.Supabase, param.Repository.ArtikelImageRepository, param.Repository.UserRepository),
 		VideoService:          NewVideoService(param.Repository.VideoRepository, param.Supabase, param.Repository.UserRepository),
+		PodcastService:        NewPodcastService(param.Repository.PodcastRepository, param.Supabase, param.Repository.UserRepository),
 		JournalingService:     NewJournalingService(param.Repository.JournalingAnsRepository, param.Repository.JournalingEntryRepository, param.Repository.JournalingQuestionRepository, param.Repository.UserRepository),
 		AfirmationWordService: NewAfirmationWordService(param.Repository.AfirmationWordRepository),
 	}

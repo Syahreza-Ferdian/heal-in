@@ -8,6 +8,7 @@ type Repository struct {
 	ArtikelRepository      InterfaceArtikelRepository
 	ArtikelImageRepository InterfaceArtikelImageRepository
 	VideoRepository        InterfaceVideoRepository
+	PodcastRepository      InterfacePodcastRepository
 
 	// journaling related repositories
 	JournalingAnsRepository      InterfaceJournalingAnsRepository
@@ -27,5 +28,6 @@ func NewRepository(db *gorm.DB) *Repository {
 		JournalingEntryRepository:    NewJournalingEntryRepository(db),
 		JournalingQuestionRepository: NewJournalingQuestionRepository(db),
 		AfirmationWordRepository:     NewAfirmationWordRepository(db),
+		PodcastRepository:            NewPodcastRepository(db),
 	}
 }
