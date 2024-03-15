@@ -97,10 +97,93 @@ func userSeeder(db *gorm.DB, bcrypt bcrypt.BcryptInterface) error {
 	return nil
 }
 
+func afirmationWordSeeder(db *gorm.DB) error {
+	words := []entity.AfirmationWord{
+		{
+			ID:     uuid.New(),
+			MoodID: 1,
+			Word:   "Afirmation Word Happy 1",
+		},
+		{
+			ID:     uuid.New(),
+			MoodID: 1,
+			Word:   "Afirmation Word Happy 2",
+		},
+		{
+			ID:     uuid.New(),
+			MoodID: 1,
+			Word:   "Afirmation Word Happy 3",
+		},
+		{
+			ID:     uuid.New(),
+			MoodID: 1,
+			Word:   "Afirmation Word Happy 4",
+		},
+		{
+			ID:     uuid.New(),
+			MoodID: 2,
+			Word:   "Afirmation Word Sad 1",
+		},
+		{
+			ID:     uuid.New(),
+			MoodID: 2,
+			Word:   "Afirmation Word Happy 2",
+		},
+		{
+			ID:     uuid.New(),
+			MoodID: 2,
+			Word:   "Afirmation Word Happy 3",
+		},
+		{
+			ID:     uuid.New(),
+			MoodID: 2,
+			Word:   "Afirmation Word Happy 4",
+		},
+		{
+			ID:     uuid.New(),
+			MoodID: 3,
+			Word:   "Afirmation Word Angry 1",
+		},
+		{
+			ID:     uuid.New(),
+			MoodID: 3,
+			Word:   "Afirmation Word Angry 2",
+		},
+		{
+			ID:     uuid.New(),
+			MoodID: 3,
+			Word:   "Afirmation Word Angry 3",
+		},
+		{
+			ID:     uuid.New(),
+			MoodID: 4,
+			Word:   "Afirmation Word Neutral 1",
+		},
+		{
+			ID:     uuid.New(),
+			MoodID: 4,
+			Word:   "Afirmation Word Neutral 2",
+		},
+		{
+			ID:     uuid.New(),
+			MoodID: 4,
+			Word:   "Afirmation Word Neutral 3",
+		},
+	}
+
+	err := db.CreateInBatches(&words, len(words)).Error
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func SeedData(db *gorm.DB, bcrypt *bcrypt.BcryptInterface) {
 	var totalQuestion int64
 	var totalMood int64
 	var totalUser int64
+	var totalAfirmationWord int64
 
 	err := db.Model(&entity.JournalingQuestion{}).Count(&totalQuestion).Error
 	if err != nil {
@@ -115,6 +198,11 @@ func SeedData(db *gorm.DB, bcrypt *bcrypt.BcryptInterface) {
 	err = db.Model(&entity.User{}).Count(&totalUser).Error
 	if err != nil {
 		log.Fatalf("Error counting user data: %v", err)
+	}
+
+	err = db.Model(&entity.AfirmationWord{}).Count(&totalAfirmationWord).Error
+	if err != nil {
+		log.Fatalf("Error counting affirmation word data: %v", err)
 	}
 
 	// seed data if there is no data in the table
@@ -142,7 +230,16 @@ func SeedData(db *gorm.DB, bcrypt *bcrypt.BcryptInterface) {
 		}
 	}
 
+	if totalAfirmationWord == 0 {
+		err := afirmationWordSeeder(db)
+
+		if err != nil {
+			log.Fatalf("Error seeding affirmation word data: %v", err)
+		}
+	}
+
 	log.Println("Question data seeded")
 	log.Println("Mood data seeded")
 	log.Println("User data seeded")
+	log.Println("Afirmation words data seeded")
 }
