@@ -10,11 +10,12 @@ import (
 )
 
 type Service struct {
-	UserService       InterfaceUserService
-	PaymentService    InterfacePaymentService
-	ArtikelService    InterfaceArtikelService
-	VideoService      InterfaceVideoService
-	JournalingService InterfaceJournalingService
+	UserService           InterfaceUserService
+	PaymentService        InterfacePaymentService
+	ArtikelService        InterfaceArtikelService
+	VideoService          InterfaceVideoService
+	JournalingService     InterfaceJournalingService
+	AfirmationWordService InterfaceAfirmationWordService
 }
 
 type InitService struct {
@@ -28,10 +29,11 @@ type InitService struct {
 
 func NewService(param InitService) *Service {
 	return &Service{
-		UserService:       NewUserService(param.Repository.UserRepository, param.Bcrypt, param.JwtAuth),
-		PaymentService:    NewPaymentService(param.Repository.PaymentRepository, param.SnapClient, param.CoreApi),
-		ArtikelService:    NewArtikelService(param.Repository.ArtikelRepository, param.Supabase, param.Repository.ArtikelImageRepository, param.Repository.UserRepository),
-		VideoService:      NewVideoService(param.Repository.VideoRepository, param.Supabase, param.Repository.UserRepository),
-		JournalingService: NewJournalingService(param.Repository.JournalingAnsRepository, param.Repository.JournalingEntryRepository, param.Repository.JournalingQuestionRepository, param.Repository.UserRepository),
+		UserService:           NewUserService(param.Repository.UserRepository, param.Bcrypt, param.JwtAuth),
+		PaymentService:        NewPaymentService(param.Repository.PaymentRepository, param.SnapClient, param.CoreApi),
+		ArtikelService:        NewArtikelService(param.Repository.ArtikelRepository, param.Supabase, param.Repository.ArtikelImageRepository, param.Repository.UserRepository),
+		VideoService:          NewVideoService(param.Repository.VideoRepository, param.Supabase, param.Repository.UserRepository),
+		JournalingService:     NewJournalingService(param.Repository.JournalingAnsRepository, param.Repository.JournalingEntryRepository, param.Repository.JournalingQuestionRepository, param.Repository.UserRepository),
+		AfirmationWordService: NewAfirmationWordService(param.Repository.AfirmationWordRepository),
 	}
 }
