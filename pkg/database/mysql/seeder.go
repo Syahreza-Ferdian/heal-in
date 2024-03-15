@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/Syahreza-Ferdian/heal-in/entity"
+	"github.com/Syahreza-Ferdian/heal-in/pkg/bcrypt"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
@@ -59,30 +60,36 @@ func moodSeeder(db *gorm.DB) error {
 
 }
 
-func userSeeder(db *gorm.DB) error {
+func userSeeder(db *gorm.DB, bcrypt bcrypt.BcryptInterface) error {
+	pass, err := bcrypt.HashPassword("syahreza")
+
+	if err != nil {
+		return err
+	}
+
 	user := []entity.User{
 		{
-			ID: uuid.New(),
-			Name: "Syahreza",
-			Email: "superadmin@admin.com",
-			Password: "syahreza",
-			IsEmailVerified: true,
+			ID:               uuid.New(),
+			Name:             "Syahreza",
+			Email:            "superadmin@admin.com",
+			Password:         pass,
+			IsEmailVerified:  true,
 			VerificationCode: "",
-			IsSubscribed: true,
+			IsSubscribed:     true,
 		},
 		{
-			ID: uuid.New(),
-			Name: "Also Syahreza",
-			Email: "me@syahreza.com",
-			Password: "syahreza",
-			IsEmailVerified: true,
+			ID:               uuid.New(),
+			Name:             "Also Syahreza",
+			Email:            "me@syahreza.com",
+			Password:         pass,
+			IsEmailVerified:  true,
 			VerificationCode: "",
-			IsSubscribed: false,
+			IsSubscribed:     false,
 		},
 	}
 
-	err := db.Create(&user).Error
-	
+	err = db.Create(&user).Error
+
 	if err != nil {
 		return err
 	}
@@ -90,7 +97,7 @@ func userSeeder(db *gorm.DB) error {
 	return nil
 }
 
-func SeedData(db *gorm.DB) {
+func SeedData(db *gorm.DB, bcrypt *bcrypt.BcryptInterface) {
 	var totalQuestion int64
 	var totalMood int64
 	var totalUser int64
@@ -110,7 +117,6 @@ func SeedData(db *gorm.DB) {
 		log.Fatalf("Error counting user data: %v", err)
 	}
 
-
 	// seed data if there is no data in the table
 	if totalQuestion == 0 {
 		err := questionSeeder(db)
@@ -129,7 +135,7 @@ func SeedData(db *gorm.DB) {
 	}
 
 	if totalUser == 0 {
-		err := userSeeder(db)
+		err := userSeeder(db, *bcrypt)
 
 		if err != nil {
 			log.Fatalf("Error seeding user data: %v", err)

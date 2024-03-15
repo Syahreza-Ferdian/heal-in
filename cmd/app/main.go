@@ -69,7 +69,7 @@ func main() {
 
 	mysql.Migrate(db)
 
-	mysql.SeedData(db)
+	mysql.SeedData(db, &bcrypt)
 
 	rest.EndPoint()
 
