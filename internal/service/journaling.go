@@ -1,6 +1,7 @@
 package service
 
 import (
+	"fmt"
 	"strconv"
 
 	"github.com/Syahreza-Ferdian/heal-in/entity"
@@ -19,17 +20,42 @@ type JournalingService struct {
 	ja repository.InterfaceJournalingAnsRepository
 	je repository.InterfaceJournalingEntryRepository
 	jq repository.InterfaceJournalingQuestionRepository
+	ur repository.InterfaceUserRepository
 }
 
-func NewJournalingService(ja repository.InterfaceJournalingAnsRepository, je repository.InterfaceJournalingEntryRepository, jq repository.InterfaceJournalingQuestionRepository) InterfaceJournalingService {
+func NewJournalingService(ja repository.InterfaceJournalingAnsRepository, je repository.InterfaceJournalingEntryRepository, jq repository.InterfaceJournalingQuestionRepository, ur repository.InterfaceUserRepository) InterfaceJournalingService {
 	return &JournalingService{
 		ja: ja,
 		je: je,
 		jq: jq,
+		ur: ur,
 	}
 }
 
 func (js *JournalingService) NewJournalingEntry(journalingReq model.JournalingEntryReq) (*entity.JournalingEntry, error) {
+	var subsStatus int
+	var journalingEntryCount int
+
+	userID := journalingReq.UserID
+
+	if userID == uuid.Nil {
+		return nil, fmt.Errorf("cannot find current user")
+	}
+
+	subsStatus, err := js.ur.GetUserSubscriptionStatus(userID.String())
+	if err != nil {
+		return nil, err
+	}
+
+	journalingEntryCount, err = js.ur.GetUserJournalingCount(userID.String())
+	if err != nil {
+		return nil, err
+	}
+
+	if subsStatus == 0 && journalingEntryCount >= 3 {
+		return nil, fmt.Errorf("user has reached maximum journaling limit. Subscribe to our feature to get unlimited journaling")
+	}
+
 	entityJournaling := &entity.JournalingEntry{
 		ID:     uuid.New(),
 		UserID: journalingReq.UserID,
@@ -55,6 +81,15 @@ func (js *JournalingService) NewJournalingEntry(journalingReq model.JournalingEn
 				return nil, err
 			}
 		}
+	}
+
+	user := &entity.User{
+		JournalingEntryCount: journalingEntryCount + 1,
+	}
+
+	err = js.ur.UpdateUserColoumn("journaling_entry_count", user, userID.String())
+	if err != nil {
+		return nil, err
 	}
 
 	return output, nil

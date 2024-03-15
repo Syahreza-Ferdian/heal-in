@@ -27,13 +27,6 @@ func (r *Rest) NewJournalingEntry(ctx *gin.Context) {
 		return
 	}
 
-	// for question_key, answers := range entryReq.Answers {
-	// 	log.Printf("Question: %s\n", question_key)
-	// 	for _, answer := range answers {
-	// 		log.Printf("Answer: %s\n", answer.Answer)
-	// 	}
-	// }
-
 	newEntry, err := r.service.JournalingService.NewJournalingEntry(entryReq)
 
 	if err != nil {

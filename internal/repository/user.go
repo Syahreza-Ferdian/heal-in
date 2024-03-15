@@ -13,6 +13,8 @@ type InterfaceUserRepository interface {
 	UpdateUserData(updatedUser *entity.User) error
 	DeleteUser(user entity.User) error
 	GetUserSubscriptionStatus(userID string) (int, error)
+	GetUserJournalingCount(userID string) (int, error)
+	UpdateUserColoumn(colname string, updated *entity.User, userID string) error
 }
 
 type UserRepository struct {
@@ -63,6 +65,16 @@ func (ur *UserRepository) UpdateUserData(updatedUser *entity.User) error {
 	return err
 }
 
+func (ur *UserRepository) UpdateUserColoumn(colname string, updated *entity.User, userID string) error {
+	err := ur.db.Debug().Select(colname).Where("id = ?", userID).Updates(updated).Error
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (ur *UserRepository) DeleteUser(user entity.User) error {
 	err := ur.db.Debug().Delete(user).Error
 
@@ -87,4 +99,19 @@ func (ur *UserRepository) GetUserSubscriptionStatus(userID string) (int, error) 
 	}
 
 	return subscribtionStatus, nil
+}
+
+func (ur *UserRepository) GetUserJournalingCount(userID string) (int, error) {
+	var user entity.User
+	var count int
+
+	err := ur.db.Debug().Where("id = ?", userID).First(&user).Error
+
+	if err != nil {
+		return -1, err
+	}
+
+	count = user.JournalingEntryCount
+
+	return count, nil
 }
