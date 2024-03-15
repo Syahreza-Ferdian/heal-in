@@ -1,6 +1,7 @@
 package rest
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/Syahreza-Ferdian/heal-in/entity"
@@ -13,7 +14,7 @@ func (r *Rest) NewJournalingEntry(ctx *gin.Context) {
 	currUser, ada := ctx.Get("user")
 
 	if !ada {
-		response.OnFailed(ctx, http.StatusUnauthorized, "Unauthorized", nil)
+		response.OnFailed(ctx, http.StatusUnauthorized, "Unauthorized", fmt.Errorf("you need to logged in to access this feature"))
 		return
 	}
 
@@ -48,4 +49,24 @@ func (r *Rest) GetJournalingEntryByID(ctx *gin.Context) {
 	}
 
 	response.OnSuccess(ctx, http.StatusOK, "Journaling entry retrieved", entry)
+}
+
+func (r *Rest) GetCurrentUserJournalingEntries(ctx *gin.Context) {
+	currUser, ada := ctx.Get("user")
+
+	if !ada {
+		response.OnFailed(ctx, http.StatusUnauthorized, "Unauthorized", fmt.Errorf("you need to logged in to access this feature"))
+		return
+	}
+
+	userID := currUser.(*entity.User).ID
+
+	entries, err := r.service.JournalingService.GetJournalingEntriesByUserID(userID.String())
+
+	if err != nil {
+		response.OnFailed(ctx, http.StatusInternalServerError, "Failed to get journaling entries", err)
+		return
+	}
+
+	response.OnSuccess(ctx, http.StatusOK, "Journaling entries retrieved", entries)
 }

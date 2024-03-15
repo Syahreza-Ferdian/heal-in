@@ -8,6 +8,7 @@ import (
 type InterfaceJournalingEntryRepository interface {
 	NewJournalingEntry(newEntry *entity.JournalingEntry) (*entity.JournalingEntry, error)
 	GetJournalingEntryByID(id string) (*entity.JournalingEntry, error)
+	GetJournalingEntriesByUserID(userID string) ([]entity.JournalingEntry, error)
 }
 
 type JournalingEntryRepository struct {
@@ -39,4 +40,15 @@ func (jer *JournalingEntryRepository) GetJournalingEntryByID(id string) (*entity
 	}
 
 	return entry, nil
+}
+
+func (jer *JournalingEntryRepository) GetJournalingEntriesByUserID(userID string) ([]entity.JournalingEntry, error) {
+	var entries []entity.JournalingEntry
+	err := jer.db.Debug().Where("user_id = ?", userID).Preload("Answers", func(db *gorm.DB) *gorm.DB { return db.Order("journaling_answers.id ASC") }).Find(&entries).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	return entries, nil
 }

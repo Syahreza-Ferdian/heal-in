@@ -14,6 +14,7 @@ type InterfaceJournalingService interface {
 	NewJournalingEntry(journalingReq model.JournalingEntryReq) (*entity.JournalingEntry, error)
 	// GetJournalingEntryByID(id string) (*entity.JournalingEntry, error)
 	GetJournalingEntryByID(id string) (model.JournalingEntryResponse, error)
+	GetJournalingEntriesByUserID(userID string) ([]model.JournalingEntryResponse, error)
 }
 
 type JournalingService struct {
@@ -138,4 +139,55 @@ func (js *JournalingService) GetJournalingEntryByID(id string) (model.Journaling
 	}
 
 	return response, nil
+}
+
+func (js *JournalingService) GetJournalingEntriesByUserID(userID string) ([]model.JournalingEntryResponse, error) {
+	entries, err := js.je.GetJournalingEntriesByUserID(userID)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var responses []model.JournalingEntryResponse
+
+	for _, entry := range entries {
+		perQuestionAnswersMap := make(map[int][]string)
+
+		for _, ans := range entry.Answers {
+			perQuestionAnswersMap[ans.QuestionID] = append(perQuestionAnswersMap[ans.QuestionID], ans.Answer)
+		}
+
+		answers := make([]model.JournalingAnswerResponse, 0)
+
+		for questionID, ans := range perQuestionAnswersMap {
+			questionText, err := js.jq.GetJournalingQuestionText(questionID)
+			if err != nil {
+				return nil, err
+			}
+
+			question := model.JournalingQuestionResponse{
+				QuestionID:   questionID,
+				QuestionText: questionText,
+				Answer:       ans,
+			}
+
+			answer := model.JournalingAnswerResponse{
+				Question: question,
+			}
+
+			answers = append(answers, answer)
+		}
+
+		response := model.JournalingEntryResponse{
+			ID:        entry.ID,
+			UserID:    entry.UserID,
+			CreatedAt: entry.CreatedAt,
+			Answers:   answers,
+			MoodID:    entry.Mood,
+		}
+
+		responses = append(responses, response)
+	}
+
+	return responses, nil
 }
