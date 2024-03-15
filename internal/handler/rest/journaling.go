@@ -29,13 +29,21 @@ func (r *Rest) NewJournalingEntry(ctx *gin.Context) {
 	}
 
 	newEntry, err := r.service.JournalingService.NewJournalingEntry(entryReq)
-
 	if err != nil {
 		response.OnFailed(ctx, http.StatusInternalServerError, "Failed to create new journaling entry", err)
 		return
 	}
 
-	response.OnSuccess(ctx, http.StatusCreated, "Journaling entry created", newEntry)
+	affWord, err := r.service.AfirmationWordService.GetAfirmationWordByMoodID(newEntry.Mood)
+	if err != nil {
+		response.OnFailed(ctx, http.StatusInternalServerError, "Failed to get afirmation word", err)
+		return
+	}
+
+	response.OnSuccess(ctx, http.StatusCreated, "Journaling entry created", gin.H{
+		"journaling_entry": newEntry,
+		"afirmation_word": affWord,
+	})
 }
 
 func (r *Rest) GetJournalingEntryByID(ctx *gin.Context) {
