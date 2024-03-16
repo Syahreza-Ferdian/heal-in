@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"os"
+	"time"
 
 	"github.com/Syahreza-Ferdian/heal-in/internal/handler/rest"
 	"github.com/Syahreza-Ferdian/heal-in/internal/repository"
@@ -12,6 +13,7 @@ import (
 	"github.com/Syahreza-Ferdian/heal-in/pkg/email"
 	"github.com/Syahreza-Ferdian/heal-in/pkg/jwt"
 	"github.com/Syahreza-Ferdian/heal-in/pkg/middleware"
+	"github.com/Syahreza-Ferdian/heal-in/pkg/scheduler"
 	"github.com/Syahreza-Ferdian/heal-in/pkg/supabase"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -50,6 +52,12 @@ func main() {
 
 	supabase := supabase.Init()
 
+	mail := email.NewEmailSender(os.Getenv("SMTP_USER"), os.Getenv("SMTP_PASS"), os.Getenv("EMAIL_FROM"))
+
+	jakartaTime, _ := time.LoadLocation("Asia/Jakarta")
+
+	schdl := scheduler.NewScheduler(jakartaTime)
+
 	service := service.NewService(
 		service.InitService{
 			Repository: repository,
@@ -58,12 +66,12 @@ func main() {
 			SnapClient: midtransSnapApi,
 			CoreApi:    midtransCoreApi,
 			Supabase:   supabase,
+			Scheduler: schdl,
+			Mail: mail,
 		},
 	)
 
 	middleware := middleware.Init(jwt, service)
-
-	mail := email.NewEmailSender(os.Getenv("SMTP_USER"), os.Getenv("SMTP_PASS"), os.Getenv("EMAIL_FROM"))
 
 	rest := rest.NewRest(gin.Default(), service, middleware, mail)
 
@@ -72,6 +80,8 @@ func main() {
 	mysql.SeedData(db, &bcrypt)
 
 	rest.EndPoint()
+
+	rest.InitPaymentExpScheduler()
 
 	rest.Start()
 }

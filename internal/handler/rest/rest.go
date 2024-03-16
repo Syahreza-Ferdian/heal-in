@@ -33,6 +33,12 @@ func NewRest(router *gin.Engine, service *service.Service, middleware middleware
 func (r *Rest) EndPoint() {
 	r.router.Use(r.middleware.Cors)
 
+	r.router.GET("/", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{
+			"message": "Hello World",
+		})
+	})
+
 	mainRouterGroup := r.router.Group("/api")
 
 	user := mainRouterGroup.Group("/user")

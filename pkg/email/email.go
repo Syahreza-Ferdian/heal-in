@@ -13,6 +13,7 @@ import (
 
 type EmailService interface {
 	SendEmail(user *model.UserRegister, data *EmailData) error
+	SendExpirationSubsEmail(data *EmailDataExpSubs) error
 }
 
 type EmailSender struct {
@@ -26,6 +27,12 @@ type EmailData struct {
 	FirstName   string
 	Subject     string
 	WebURL      string
+}
+
+type EmailDataExpSubs struct {
+	FirstName string
+	Subject   string
+	ToEmail   string
 }
 
 func NewEmailSender(name string, password string, fromEmail string) EmailService {
@@ -44,6 +51,29 @@ func (e *EmailSender) SendEmail(user *model.UserRegister, data *EmailData) error
 	m := gomail.NewMessage()
 	m.SetHeader("From", e.FromEmail)
 	m.SetHeader("To", user.Email)
+	m.SetHeader("Subject", data.Subject)
+	m.SetBody("text/html", body)
+	m.AddAlternative("text/plain", html2text.HTML2Text(body))
+
+	dialer := gomail.NewDialer(os.Getenv("SMTP_HOST"), serverPort, e.Name, e.Password)
+	dialer.TLSConfig = &tls.Config{InsecureSkipVerify: true}
+
+	err := dialer.DialAndSend(m)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (e *EmailSender) SendExpirationSubsEmail(data *EmailDataExpSubs) error {
+	serverPort, _ := strconv.Atoi(os.Getenv("SMTP_PORT"))
+
+	body := fmt.Sprintf("<p>Hi, %s</p> <p>Your subscription on <b>Heal.in</b> has expired. Please renew your subscription to continue using our premium service.</p> <br> Sincelery, <br> Heal.in", data.FirstName)
+
+	m := gomail.NewMessage()
+	m.SetHeader("From", e.FromEmail)
+	m.SetHeader("To", data.ToEmail)
 	m.SetHeader("Subject", data.Subject)
 	m.SetBody("text/html", body)
 	m.AddAlternative("text/plain", html2text.HTML2Text(body))

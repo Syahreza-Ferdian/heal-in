@@ -55,3 +55,7 @@ func (r *Rest) PaymentNotification(c *gin.Context) {
 
 	response.OnSuccess(c, http.StatusOK, "Payment Success", nil)
 }
+
+func (r *Rest) InitPaymentExpScheduler() {
+	r.service.PaymentService.SetupScheduler()
+}
