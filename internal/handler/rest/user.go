@@ -53,7 +53,7 @@ func (r *Rest) CreateUser(c *gin.Context) {
 		return
 	}
 
-	response.OnSuccess(c, http.StatusCreated, "Berhasil registrasi user, silakan cek email untuk verifikasi", nil)
+	response.OnSuccess(c, http.StatusCreated, "Berhasil registrasi user, silakan cek email untuk verifikasi. NOTE: Apabila Anda tidak menerima email, silakan pastikan kembali bahwa email yang Anda masukkan sudah benar.", nil)
 }
 
 func (r *Rest) Login(c *gin.Context) {
