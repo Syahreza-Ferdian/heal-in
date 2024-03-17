@@ -2,7 +2,6 @@ package service
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/Syahreza-Ferdian/heal-in/entity"
 	"github.com/Syahreza-Ferdian/heal-in/internal/repository"
@@ -63,10 +62,10 @@ func (us *UserService) Register(userReq model.UserRegister) (entity.User, email.
 
 	return user,
 		email.EmailData{
-			RedirectURL: fmt.Sprintf("%s/api/user/email/verify/%s", os.Getenv("APP_URL"), verificationCode),
+			RedirectURL: fmt.Sprintf("%s/api/user/email/verify/%s", "http://localhost:8080", verificationCode),
 			FirstName:   user.Name,
 			Subject:     "Verifikasi Email Anda",
-			WebURL:      os.Getenv("APP_URL"),
+			WebURL:      "http://localhost:8080",
 		}, nil
 }
 
