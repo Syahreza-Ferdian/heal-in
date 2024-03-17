@@ -9,6 +9,7 @@ import (
 
 type SupabaseInterface interface {
 	UploadFile(file *multipart.FileHeader) (string, error)
+	DeleteFile(link string) error
 }
 
 type Supabase struct {
@@ -35,4 +36,14 @@ func (s *Supabase) UploadFile(file *multipart.FileHeader) (string, error) {
 	}
 
 	return link, nil
+}
+
+func (s *Supabase) DeleteFile(link string) error {
+	err := s.client.Delete(link)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
