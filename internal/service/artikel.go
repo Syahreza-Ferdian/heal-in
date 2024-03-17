@@ -79,6 +79,11 @@ func (as *ArtikelService) UploadArtikelImage(artikelID string, artikelImageReq m
 	_, err = as.air.CreateArtikelImage(artikelEntity)
 
 	if err != nil {
+		err1 := as.supabase.DeleteFile(link)
+		
+		if err1 != nil {
+			return err
+		}
 		return err
 	}
 
