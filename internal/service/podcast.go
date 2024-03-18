@@ -30,10 +30,17 @@ func NewPodcastService(pdr repository.InterfacePodcastRepository, spb supabase.S
 
 func (ps *PodcastService) NewPodcast(podcastReq model.NewPodcastRequest) (*entity.Podcast, error) {
 	podcastReq.ID = uuid.New()
+	var err1 error
+	var err2 error
 
-	podcastLink, err := ps.supabase.UploadFile(podcastReq.Podcast)
-	if err != nil {
-		return nil, err
+	podcastLink, err1 := ps.supabase.UploadFile(podcastReq.Podcast)
+	if err1 != nil {
+		return nil, err1
+	}
+
+	thumbnailLink, err2 := ps.supabase.UploadFile(podcastReq.Thumbnail)
+	if err2 != nil {
+		return nil, err2
 	}
 
 	newPodcastEntity := &entity.Podcast{
@@ -41,6 +48,23 @@ func (ps *PodcastService) NewPodcast(podcastReq model.NewPodcastRequest) (*entit
 		Title:       podcastReq.Title,
 		Link:        podcastLink,
 		Description: podcastReq.Description,
+		Thumbnail:   thumbnailLink,
+	}
+
+	if err1 != nil || err2 != nil {
+		err := ps.pdr.DeletePodcast(newPodcastEntity)
+
+		if err != nil {
+			return nil, err
+		}
+
+		if err1 != nil {
+			return nil, err1
+		}
+
+		if err2 != nil {
+			return nil, err2
+		}
 	}
 
 	newPodcast, err := ps.pdr.NewPodcast(newPodcastEntity)
