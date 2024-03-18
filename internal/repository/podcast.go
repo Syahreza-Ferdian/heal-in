@@ -9,6 +9,7 @@ type InterfacePodcastRepository interface {
 	NewPodcast(newPodcast *entity.Podcast) (*entity.Podcast, error)
 	GetPodcastByID(id string) (*entity.Podcast, error)
 	GetAllPodcasts(limit bool) ([]*entity.Podcast, error)
+	DeletePodcast(deleted *entity.Podcast) error
 }
 
 type PodcastRepository struct {
@@ -58,4 +59,14 @@ func (pr *PodcastRepository) GetAllPodcasts(limit bool) ([]*entity.Podcast, erro
 	}
 
 	return podcasts, nil
+}
+
+func (pr *PodcastRepository) DeletePodcast(deleted *entity.Podcast) error {
+	err := pr.db.Debug().Delete(&deleted).Error
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
