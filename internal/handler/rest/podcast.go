@@ -27,6 +27,14 @@ func (r *Rest) NewPodcast(ctx *gin.Context) {
 
 	podcastReq.Podcast = podcastFile
 
+	thumbnailFile, err := ctx.FormFile("thumbnail")
+	if err != nil {
+		response.OnFailed(ctx, http.StatusBadRequest, "failed to get thumbnail file", err)
+		return
+	}
+
+	podcastReq.Thumbnail = thumbnailFile
+
 	podcast, err := r.service.PodcastService.NewPodcast(podcastReq)
 	if err != nil {
 		response.OnFailed(ctx, http.StatusInternalServerError, "failed to create a new podcast", err)

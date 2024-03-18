@@ -12,4 +12,5 @@ type Podcast struct {
 	Link        string    `json:"link" gorm:"type:varchar(255);not null;"`
 	Description string    `json:"description" gorm:"type:varchar(255)"`
 	CreatedAt   time.Time `json:"created_at" gorm:"autoCreateTime"`
+	Thumbnail   string    `json:"thumbnail" gorm:"type:varchar(255)"`
 }

@@ -11,4 +11,5 @@ type NewPodcastRequest struct {
 	Title       string                `form:"title"`
 	Description string                `form:"description"`
 	Podcast     *multipart.FileHeader `form:"podcast"`
+	Thumbnail   *multipart.FileHeader `form:"thumbnail"`
 }
