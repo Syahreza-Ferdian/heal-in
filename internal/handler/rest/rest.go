@@ -72,6 +72,11 @@ func (r *Rest) EndPoint() {
 	journaling := mainRouterGroup.Group("/journaling")
 	journaling.POST("/new", r.middleware.AuthenticateUser, r.NewJournalingEntry)
 	journaling.GET("/:id", r.GetJournalingEntryByID)
+
+	event := mainRouterGroup.Group("/event")
+	event.POST("/new", r.NewEvent)
+	event.GET("/:id", r.GetEventByID)
+	event.GET("/all", r.GetAllEvents)
 }
 
 func (r *Rest) Start() {
