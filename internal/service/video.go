@@ -12,6 +12,7 @@ type InterfaceVideoService interface {
 	NewVideo(video model.NewVideoRequest) (*entity.Video, error)
 	GetAllVideos(userID string) ([]*entity.Video, error)
 	GetVideo(id string) (*entity.Video, error)
+	NewVideoWithLink(video model.NewVideoRequestAlt) (*entity.Video, error)
 }
 
 type VideoService struct {
@@ -42,6 +43,25 @@ func (vs *VideoService) NewVideo(video model.NewVideoRequest) (*entity.Video, er
 		Title:       video.Title,
 		Description: video.Description,
 		Link:        link,
+	}
+
+	newVideo, err := vs.vr.NewVideo(videoEntity)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return newVideo, nil
+}
+
+func (vs *VideoService) NewVideoWithLink(video model.NewVideoRequestAlt) (*entity.Video, error) {
+	video.ID = uuid.New()
+
+	videoEntity := &entity.Video{
+		ID:          video.ID,
+		Title:       video.Title,
+		Description: video.Description,
+		Link:        video.Link,
 	}
 
 	newVideo, err := vs.vr.NewVideo(videoEntity)

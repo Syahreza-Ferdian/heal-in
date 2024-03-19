@@ -39,6 +39,25 @@ func (r *Rest) NewVideo(ctx *gin.Context) {
 	response.OnSuccess(ctx, http.StatusCreated, "video created", video)
 }
 
+func (r *Rest) NewVideoWithLink(ctx *gin.Context) {
+	var videoReq model.NewVideoRequestAlt
+
+	err := ctx.Bind(&videoReq)
+	if err != nil {
+		response.OnFailed(ctx, http.StatusBadRequest, "failed to bind video request", err)
+		return
+	}
+
+	video, err := r.service.VideoService.NewVideoWithLink(videoReq)
+
+	if err != nil {
+		response.OnFailed(ctx, http.StatusInternalServerError, "failed to create video", err)
+		return
+	}
+
+	response.OnSuccess(ctx, http.StatusCreated, "video created", video)
+}
+
 func (r *Rest) GetAllVideos(ctx *gin.Context) {
 	currUser, ada := ctx.Get("user")
 

@@ -12,3 +12,10 @@ type NewVideoRequest struct {
 	Description string                `form:"description"`
 	Video       *multipart.FileHeader `form:"video"`
 }
+
+type NewVideoRequestAlt struct {
+	ID          uuid.UUID `form:"-"`
+	Title       string    `form:"title"`
+	Description string    `form:"description"`
+	Link        string    `form:"link"`
+}
