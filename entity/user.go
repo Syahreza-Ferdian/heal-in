@@ -19,4 +19,5 @@ type User struct {
 	JournalingEntryCount int               `json:"journaling_entry_count" gorm:"type:int;default:0"`
 	Payment              []Payment         `json:"payments"`
 	JournalingEntry      []JournalingEntry `json:"journaling_entries" gorm:"foreignKey:UserID;references:ID;onUpdate:CASCADE;onDelete:CASCADE;"`
+	PaymentEvent         []PaymentEvent    `json:"payment_events" gorm:"foreignKey:UserID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }

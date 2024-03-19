@@ -22,6 +22,7 @@ func Migrate(db *gorm.DB) {
 	// &entity.AfirmationWord{},
 	// &entity.Event{},
 	// &entity.EventImage{},
+	// &entity.PaymentEvent{},
 	)
 
 	err := db.AutoMigrate(
@@ -38,6 +39,7 @@ func Migrate(db *gorm.DB) {
 		&entity.AfirmationWord{},
 		&entity.Event{},
 		&entity.EventImage{},
+		&entity.PaymentEvent{},
 	)
 
 	if err != nil {
