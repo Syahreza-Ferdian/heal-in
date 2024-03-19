@@ -20,6 +20,7 @@ type Service struct {
 	JournalingService     InterfaceJournalingService
 	AfirmationWordService InterfaceAfirmationWordService
 	EventService          InterfaceEventService
+	MidtransService       InterfaceMidtransService
 }
 
 type InitService struct {
@@ -42,6 +43,7 @@ func NewService(param InitService) *Service {
 		PodcastService:        NewPodcastService(param.Repository.PodcastRepository, param.Supabase, param.Repository.UserRepository),
 		JournalingService:     NewJournalingService(param.Repository.JournalingAnsRepository, param.Repository.JournalingEntryRepository, param.Repository.JournalingQuestionRepository, param.Repository.UserRepository),
 		AfirmationWordService: NewAfirmationWordService(param.Repository.AfirmationWordRepository),
-		EventService:          NewEventService(param.Repository.EventRepository, param.Repository.EventImageRepository, param.Supabase),
+		EventService:          NewEventService(param.Repository.EventRepository, param.Repository.EventImageRepository, param.Supabase, param.Repository.UserRepository, param.SnapClient, param.Repository.PaymentEventRepository),
+		MidtransService:       NewMidtransService(param.CoreApi, param.Repository.PaymentRepository, param.Repository.PaymentEventRepository),
 	}
 }
