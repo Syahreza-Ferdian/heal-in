@@ -9,6 +9,13 @@ type MidtransRequest struct {
 	Description string    `json:"description" binding:"required"`
 }
 
+type EventPaymentRequest struct {
+	OrderID uuid.UUID `json:"order_id"`
+	EventID uuid.UUID `json:"event_id" binding:"required"`
+	UserID  uuid.UUID `json:"user_id"`
+	Amount  int       `json:"amount"`
+}
+
 type MidtransResponse struct {
 	Token   string `json:"token"`
 	SnapURL string `json:"snap_url"`
