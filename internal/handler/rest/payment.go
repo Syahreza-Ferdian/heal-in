@@ -46,7 +46,7 @@ func (r *Rest) PaymentNotification(c *gin.Context) {
 		return
 	}
 
-	err = r.service.PaymentService.PaymentNotification(payload)
+	err = r.service.MidtransService.HandleAfterPayment(payload)
 
 	if err != nil {
 		response.OnFailed(c, http.StatusInternalServerError, "Payment Failed", err)
