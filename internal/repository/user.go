@@ -15,6 +15,7 @@ type InterfaceUserRepository interface {
 	GetUserSubscriptionStatus(userID string) (int, error)
 	GetUserJournalingCount(userID string) (int, error)
 	UpdateUserColoumn(colname string, updated *entity.User, userID string) error
+	GetUserJoinedEvents(userID string) ([]entity.Event, error)
 }
 
 type UserRepository struct {
@@ -114,4 +115,33 @@ func (ur *UserRepository) GetUserJournalingCount(userID string) (int, error) {
 	count = user.JournalingEntryCount
 
 	return count, nil
+}
+
+func (ur *UserRepository) GetUserJoinedEvents(userID string) ([]entity.Event, error) {
+	var user entity.User
+	var events []entity.PaymentEvent
+	var joinedEvents []entity.Event
+
+	err := ur.db.Debug().Where("id = ?", userID).Preload("PaymentEvent").First(&user).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	events = user.PaymentEvent
+
+	for _, event := range events {
+		var eventDetails entity.Event
+
+		if event.IsCompleted {
+			err := ur.db.Debug().Where("id = ?", event.EventID).Preload("EventImage").First(&eventDetails).Error
+			if err != nil {
+				return nil, err
+			}
+
+			joinedEvents = append(joinedEvents, eventDetails)
+		}
+	}
+
+	return joinedEvents, nil
 }
