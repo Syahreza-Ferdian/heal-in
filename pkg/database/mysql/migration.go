@@ -9,16 +9,19 @@ import (
 
 func Migrate(db *gorm.DB) {
 	db.Migrator().DropTable(
-		&entity.User{},
-		&entity.Artikel{},
-		&entity.Payment{},
-		&entity.ArtikelImage{},
-		&entity.Video{},
-		&entity.JournalingEntry{},
-		&entity.JournalingQuestion{},
-		&entity.JournalingAnswer{},
-		&entity.JournalingMood{},
-		&entity.AfirmationWord{},
+	// &entity.User{},
+	// &entity.Artikel{},
+	// &entity.Payment{},
+	// &entity.ArtikelImage{},
+	// &entity.Video{},
+	// &entity.Podcast{},
+	// &entity.JournalingEntry{},
+	// &entity.JournalingQuestion{},
+	// &entity.JournalingAnswer{},
+	// &entity.JournalingMood{},
+	// &entity.AfirmationWord{},
+	// &entity.Event{},
+	// &entity.EventImage{},
 	)
 
 	err := db.AutoMigrate(
@@ -27,11 +30,14 @@ func Migrate(db *gorm.DB) {
 		&entity.Artikel{},
 		&entity.ArtikelImage{},
 		&entity.Video{},
+		&entity.Podcast{},
 		&entity.JournalingEntry{},
 		&entity.JournalingQuestion{},
 		&entity.JournalingAnswer{},
 		&entity.JournalingMood{},
 		&entity.AfirmationWord{},
+		&entity.Event{},
+		&entity.EventImage{},
 	)
 
 	if err != nil {
