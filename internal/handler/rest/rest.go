@@ -47,6 +47,7 @@ func (r *Rest) EndPoint() {
 	user.GET("/login-user", r.middleware.AuthenticateUser, Testing)
 	user.GET("/email/verify/:verificationCode", r.VerifyEmail)
 	user.GET("/journaling/get", r.middleware.AuthenticateUser, r.GetCurrentUserJournalingEntries)
+	user.GET("/events/get", r.middleware.AuthenticateUser, r.GetUserEvents)
 
 	payment := mainRouterGroup.Group("/payment")
 	payment.POST("/new", r.middleware.AuthenticateUser, r.NewPayment)
@@ -77,6 +78,7 @@ func (r *Rest) EndPoint() {
 	event.POST("/new", r.NewEvent)
 	event.GET("/:id", r.GetEventByID)
 	event.GET("/all", r.GetAllEvents)
+	event.POST("/join", r.middleware.AuthenticateUser, r.EventPayment)
 }
 
 func (r *Rest) Start() {
