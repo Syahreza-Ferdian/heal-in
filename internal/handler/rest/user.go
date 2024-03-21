@@ -45,7 +45,7 @@ func (r *Rest) CreateUser(c *gin.Context) {
 		return
 	}
 
-	err = r.mail.SendEmail(&userRequest, &emailData)
+	err = r.mail.SendVerificationEmail(&userRequest, &emailData)
 
 	if err != nil {
 		response.OnFailed(c, http.StatusInternalServerError, "Gagal mengirim email verifikasi, silakan coba register kembali", err)

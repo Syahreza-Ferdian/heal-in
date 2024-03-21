@@ -12,7 +12,7 @@ import (
 )
 
 type EmailService interface {
-	SendEmail(user *model.UserRegister, data *EmailData) error
+	SendVerificationEmail(user *model.UserRegister, data *EmailData) error
 	SendExpirationSubsEmail(data *EmailDataExpSubs) error
 }
 
@@ -43,7 +43,7 @@ func NewEmailSender(name string, password string, fromEmail string) EmailService
 	}
 }
 
-func (e *EmailSender) SendEmail(user *model.UserRegister, data *EmailData) error {
+func (e *EmailSender) SendVerificationEmail(user *model.UserRegister, data *EmailData) error {
 	serverPort, _ := strconv.Atoi(os.Getenv("SMTP_PORT"))
 
 	body := fmt.Sprintf("<p>Hi, %s</p> <p>Follow this link below to confirm your email address. If you didn't create an account with <a href='%s'>Heal.in</a>, you can safely delete this email.</p> <a href='%s'>Klik</a> <br> <p>You received this email because we received a request for registration for your account. If you didn't request that registration into our service, you can safely delete this email.</p>", data.FirstName, data.WebURL, data.RedirectURL)
