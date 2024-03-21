@@ -62,10 +62,10 @@ func (us *UserService) Register(userReq model.UserRegister) (entity.User, email.
 
 	return user,
 		email.EmailData{
-			RedirectURL: fmt.Sprintf("%s/api/user/email/verify/%s", "http://localhost:8080", verificationCode),
+			RedirectURL: fmt.Sprintf("http://heal-in.vercel.app/verify/%s", verificationCode),
 			FirstName:   user.Name,
 			Subject:     "Verifikasi Email Anda",
-			WebURL:      "http://localhost:8080",
+			WebURL:      "http://heal-in.vercel.app/",
 		}, nil
 }
 
