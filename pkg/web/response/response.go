@@ -53,3 +53,16 @@ func OnErrorValidate(c *gin.Context, code int, message string, data any) {
 
 	c.JSON(code, responseStr)
 }
+
+func NotFound(c *gin.Context, code int, message string) {
+	responseStr := Response{
+		Status: Status{
+			Code:      code,
+			IsSuccess: false,
+		},
+		Message: message,
+		Data:    nil,
+	}
+
+	c.JSON(404, responseStr)
+}
