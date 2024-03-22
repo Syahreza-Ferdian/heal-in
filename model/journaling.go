@@ -6,7 +6,6 @@ import (
 	"github.com/google/uuid"
 )
 
-// REQUEST MODEL
 type JournalingEntryReq struct {
 	UserID  uuid.UUID                        `json:"user_id"`
 	Answers map[string][]JournalingAnswerReq `json:"answers"`
@@ -21,7 +20,6 @@ type MoodReq struct {
 	MoodID int `json:"mood_id"`
 }
 
-// RESPONSE MODEL
 type JournalingEntryResponse struct {
 	ID        uuid.UUID                  `json:"id"`
 	UserID    uuid.UUID                  `json:"user_id"`

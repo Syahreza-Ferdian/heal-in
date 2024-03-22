@@ -11,12 +11,7 @@ type ArtikelUploadImageParam struct {
 	Image *multipart.FileHeader `form:"image"`
 }
 
-// type NewArtikel struct {
-// 	Artikel string `form:"artikel"`
-// }
-
 type NewArtikelRequest struct {
-	// NewArtikel
 	ID    uuid.UUID `form:"-"`
 	Title string    `form:"title"`
 	Body  string    `form:"body"`

@@ -19,7 +19,6 @@ import (
 
 type InterfacePaymentService interface {
 	NewPayment(paymentReq model.MidtransRequest, c *gin.Context) (model.MidtransResponse, error)
-	// PaymentNotification(payload model.NotificationPayload) error
 	SendEmailToExpiredSubs() ([]email.EmailDataExpSubs, error)
 	SetupScheduler()
 }
@@ -53,9 +52,6 @@ func (ps *PaymentService) NewPayment(paymentReq model.MidtransRequest, c *gin.Co
 
 	paymentReq.OrderId = uuid.New()
 	paymentReq.UserID = currentUser.(*entity.User).ID
-
-	// var snapClient = snap.Client{}
-	// snapClient.New(os.Getenv("MIDTRANS_SERVER_KEY"), midtrans.Sandbox)
 
 	snapReq := snap.Request{
 		TransactionDetails: midtrans.TransactionDetails{
@@ -103,31 +99,6 @@ func (ps *PaymentService) NewPayment(paymentReq model.MidtransRequest, c *gin.Co
 	return midtransResponse, nil
 }
 
-// func (ps *PaymentService) PaymentNotification(payload model.NotificationPayload) error {
-// 	orderID, oke := payload["order_id"].(string)
-
-// 	if !oke {
-// 		return fmt.Errorf("failed to get order_id")
-// 	}
-
-// 	transactionResponse, err := ps.coreApi.CheckTransaction(orderID)
-
-// 	if err != nil {
-// 		return err
-// 	}
-
-// 	if transactionResponse != nil {
-// 		if transactionResponse.TransactionStatus == "settlement" {
-// 			err := ps.pr.UpdatePaymentOnSuccess(orderID)
-// 			if err != nil {
-// 				return err
-// 			}
-// 		}
-// 	}
-
-// 	return nil
-// }
-
 func (ps *PaymentService) SendEmailToExpiredSubs() ([]email.EmailDataExpSubs, error) {
 	expPayments, err := ps.pr.GetExpiredSubscriptions()
 	if err != nil {
@@ -164,15 +135,7 @@ func (ps *PaymentService) SendEmailToExpiredSubs() ([]email.EmailDataExpSubs, er
 func (ps *PaymentService) SetupScheduler() {
 	ps.scheduler.Stop()
 
-	// corn job pattern : second, minute, hour, day, month, weekday
-
-	// Run every day at 00:00:00
 	ps.scheduler.AddFunction("0 0 0 * * *", ps.ExpEmailSender)
-
-	// Testing buat memastikan scheduler jalan dengan baik
-	// ps.scheduler.AddFunction("@every 5m", func() {
-	// 	log.Println("Scheduler: If you seen this message, it means the scheduler is running properly.")
-	// })
 
 	ps.scheduler.Start()
 }

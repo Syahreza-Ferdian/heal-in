@@ -5,5 +5,4 @@ type JournalingMood struct {
 	Mood            string            `json:"-" gorm:"type:varchar(255);not null;"`
 	AfirmationWords []AfirmationWord  `json:"afirmation_words" gorm:"foreignKey:MoodID;references:ID;onUpdate:CASCADE;onDelete:CASCADE;"`
 	EntryID         []JournalingEntry `json:"entry_id" gorm:"foreignKey:mood;references:ID;onUpdate:CASCADE;onDelete:CASCADE;"`
-	// EntryID         uuid.UUID        `json:"entry_id" gorm:"type:varchar(36);"`
 }

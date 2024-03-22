@@ -39,7 +39,6 @@ func (r *Rest) NewJournalingEntry(ctx *gin.Context) {
 	}
 
 	response.OnSuccess(ctx, http.StatusCreated, "Journaling entry created", gin.H{
-		// "journaling_entry": newEntry,
 		"afirmation_word": affWord,
 	})
 }

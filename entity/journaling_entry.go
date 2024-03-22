@@ -12,5 +12,4 @@ type JournalingEntry struct {
 	CreatedAt time.Time          `json:"created_at" gorm:"autoCreateTime"`
 	Answers   []JournalingAnswer `json:"answers" gorm:"foreignKey:EntryID;references:ID;onUpdate:CASCADE;onDelete:CASCADE;"`
 	Mood      int                `json:"mood" gorm:"type:int;"`
-	// Mood      []JournalingMood   `json:"mood" gorm:"foreignKey:EntryID;references:ID;onUpdate:CASCADE;onDelete:CASCADE;"`
 }

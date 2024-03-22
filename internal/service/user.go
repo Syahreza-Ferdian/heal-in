@@ -35,7 +35,6 @@ func NewUserService(ur repository.InterfaceUserRepository, bcrypt bcrypt.BcryptI
 	}
 }
 
-// TODO : Register nge return entity.User, email.EmailData, error
 func (us *UserService) Register(userReq model.UserRegister) (entity.User, email.EmailData, error) {
 	hashPassword, err := us.bcrypt.HashPassword(userReq.Password)
 
@@ -49,8 +48,6 @@ func (us *UserService) Register(userReq model.UserRegister) (entity.User, email.
 	user := model.UserRegisterToEntity(userReq)
 
 	verificationCode, _ := random.GenerateRandomString(10)
-
-	// EMAIL
 
 	user.VerificationCode = verificationCode
 

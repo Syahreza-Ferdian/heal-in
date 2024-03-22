@@ -11,12 +11,6 @@ import (
 )
 
 func (r *Rest) NewArtikel(ctx *gin.Context) {
-	// err := ctx.Request.ParseMultipartForm(32 << 20)
-	// if err != nil {
-	// 	response.OnFailed(ctx, http.StatusInternalServerError, "failed to parse multipart form", err)
-	// 	return
-	// }
-
 	var artikelReq model.NewArtikelRequest
 
 	err := ctx.Bind(&artikelReq)

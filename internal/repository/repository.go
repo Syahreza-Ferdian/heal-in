@@ -10,13 +10,11 @@ type Repository struct {
 	VideoRepository        InterfaceVideoRepository
 	PodcastRepository      InterfacePodcastRepository
 
-	// journaling related repositories
 	JournalingAnsRepository      InterfaceJournalingAnsRepository
 	JournalingEntryRepository    InterfaceJournalingEntryRepository
 	JournalingQuestionRepository InterfaceJournalingQuestionRepository
 	AfirmationWordRepository     InterfaceAfirmationWordRepository
 
-	// event related repositories
 	EventRepository        InterfaceEventRepository
 	EventImageRepository   InterfaceEventImageRepository
 	PaymentEventRepository InterfacePaymentEventRepository

@@ -43,11 +43,11 @@ func NewEventService(er repository.InterfaceEventRepository, eir repository.Inte
 }
 
 func (es *EventService) NewEvent(newEvent model.NewEventRequest) (*entity.Event, error) {
-	parseStartDate, err := time.Parse("2006-01-02", newEvent.StartDate)
+	parseStartDate, err := time.Parse("2006-01-02 08:00", newEvent.StartDate)
 	if err != nil {
 		return nil, err
 	}
-	parseEndDate, err := time.Parse("2006-01-02", newEvent.EndDate)
+	parseEndDate, err := time.Parse("2006-01-02 08:00", newEvent.EndDate)
 	if err != nil {
 		return nil, err
 	}

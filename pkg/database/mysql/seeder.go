@@ -109,7 +109,6 @@ func userSeeder(db *gorm.DB, bcrypt bcrypt.BcryptInterface) error {
 
 func afirmationWordSeeder(db *gorm.DB) error {
 	words := []entity.AfirmationWord{
-		// mood 1 -> kecewa
 		{
 			ID:     uuid.New(),
 			MoodID: 1,
@@ -126,7 +125,6 @@ func afirmationWordSeeder(db *gorm.DB) error {
 			Word:   "Kamu memiliki kekuatan untuk bangkit dari kekecewaan ini. Aku yakin kamu bisa bangkit dan akan menemukan kebahagiaan lagi🤗",
 		},
 
-		// mood 2 -> bahagia
 		{
 			ID:     uuid.New(),
 			MoodID: 2,
@@ -148,7 +146,6 @@ func afirmationWordSeeder(db *gorm.DB) error {
 			Word:   "Aku jadi ikut bahagia melihatmu bahagia. Kebahagiaanmu membuat dunia ini menjadi tempat yang lebih indah🌈✨",
 		},
 
-		// mood 3 -> sedih
 		{
 			ID:     uuid.New(),
 			MoodID: 3,
@@ -165,7 +162,6 @@ func afirmationWordSeeder(db *gorm.DB) error {
 			Word:   "Tidak apa bersedih. Aku percaya padamu. Kamu bisa melewati ini. Kamu orang yang kuat🥹💪🏻",
 		},
 
-		// mood 4 -> lelah
 		{
 			ID:     uuid.New(),
 			MoodID: 4,
@@ -187,7 +183,6 @@ func afirmationWordSeeder(db *gorm.DB) error {
 			Word:   "Jangan paksakan dirimu terlalu keras. Istirahat sejenak ya. Jangan lupa makan, tidur, dan jaga kesehatan. Karena kamu berharga😉✨",
 		},
 
-		// mood 5 -> marah
 		{
 			ID:     uuid.New(),
 			MoodID: 5,
@@ -451,7 +446,6 @@ func SeedData(db *gorm.DB, bcrypt *bcrypt.BcryptInterface) {
 		log.Fatalf("Error counting event data: %v", err)
 	}
 
-	// seed data if there is no data in the table
 	if totalQuestion == 0 {
 		err := questionSeeder(db)
 

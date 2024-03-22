@@ -25,8 +25,6 @@ import (
 )
 
 func main() {
-	// config.LoadEnv()
-
 	err := godotenv.Load("../../.env")
 	env := os.Getenv("ENV")
 

@@ -12,7 +12,6 @@ import (
 
 type InterfaceJournalingService interface {
 	NewJournalingEntry(journalingReq model.JournalingEntryReq) (*entity.JournalingEntry, error)
-	// GetJournalingEntryByID(id string) (*entity.JournalingEntry, error)
 	GetJournalingEntryByID(id string) (model.JournalingEntryResponse, error)
 	GetJournalingEntriesByUserID(userID string) ([]model.JournalingEntryResponse, error)
 }
