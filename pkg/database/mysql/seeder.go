@@ -44,16 +44,19 @@ func questionSeeder(db *gorm.DB) error {
 func moodSeeder(db *gorm.DB) error {
 	moods := []entity.JournalingMood{
 		{
-			Mood: "Happy",
+			Mood: "Kecewa",
 		},
 		{
-			Mood: "Sad",
+			Mood: "Bahagia",
 		},
 		{
-			Mood: "Angry",
+			Mood: "Sedih",
 		},
 		{
-			Mood: "Neutral",
+			Mood: "Lelah",
+		},
+		{
+			Mood: "Marah",
 		},
 	}
 
@@ -106,75 +109,94 @@ func userSeeder(db *gorm.DB, bcrypt bcrypt.BcryptInterface) error {
 
 func afirmationWordSeeder(db *gorm.DB) error {
 	words := []entity.AfirmationWord{
+		// mood 1 -> kecewa
 		{
 			ID:     uuid.New(),
 			MoodID: 1,
-			Word:   "Afirmation Word Happy 1",
-		},
-		{
-			ID:     uuid.New(),
-			MoodID: 1,
-			Word:   "Afirmation Word Happy 2",
+			Word:   "Yaahh.. apa hal yang membuatmu kecewa? Apapun itu, Aku harap masalahmu terselesaikan dengan baik ya.. Aku yakin kamu bisa melewatinya. Semangatt!!💪🏻🔥",
 		},
 		{
 			ID:     uuid.New(),
 			MoodID: 1,
-			Word:   "Afirmation Word Happy 3",
+			Word:   "Hari ini mungkin agak mengecewakan, tetapi esok akan menjadi peluang baru untuk meraih kebahagiaanmu. Tetap optimis dan percayalah pada dirimu sendiri✨",
 		},
 		{
 			ID:     uuid.New(),
 			MoodID: 1,
-			Word:   "Afirmation Word Happy 4",
+			Word:   "Kamu memiliki kekuatan untuk bangkit dari kekecewaan ini. Aku yakin kamu bisa bangkit dan akan menemukan kebahagiaan lagi🤗",
+		},
+
+		// mood 2 -> bahagia
+		{
+			ID:     uuid.New(),
+			MoodID: 2,
+			Word:   "Waah, senang melihatmu bahagia. Semoga kebahagiaan akan datang lagi kepadamu esok hari🤩",
 		},
 		{
 			ID:     uuid.New(),
 			MoodID: 2,
-			Word:   "Afirmation Word Sad 1",
+			Word:   "Aku sangat senang melihatmu bahagia. Semoga kebahagiaan selalu menyertaimu😊",
 		},
 		{
 			ID:     uuid.New(),
 			MoodID: 2,
-			Word:   "Afirmation Word Happy 2",
+			Word:   "Senang melihatmu bahagia🤩 Aku yakin kamu akan terus bahagia dan dapat mencapai semua mimpimu😉",
 		},
 		{
 			ID:     uuid.New(),
 			MoodID: 2,
-			Word:   "Afirmation Word Happy 3",
+			Word:   "Aku jadi ikut bahagia melihatmu bahagia. Kebahagiaanmu membuat dunia ini menjadi tempat yang lebih indah🌈✨",
 		},
+
+		// mood 3 -> sedih
 		{
 			ID:     uuid.New(),
-			MoodID: 2,
-			Word:   "Afirmation Word Happy 4",
+			MoodID: 3,
+			Word:   "Aku turut sedih melihatmu sedih😢 Tapi aku yakin kamu bisa melewati semua ini. Kamu lebih kuat daripada yang kamu kira😉",
 		},
 		{
 			ID:     uuid.New(),
 			MoodID: 3,
-			Word:   "Afirmation Word Angry 1",
+			Word:   "Meskipun sekarang mungkin terasa berat, percayalah bahwa kamu memiliki kekuatan dan mampu untuk mengatasi semuanya. Kebahagiaanmu masih menanti di ujung perjalanan🥹",
 		},
 		{
 			ID:     uuid.New(),
 			MoodID: 3,
-			Word:   "Afirmation Word Angry 2",
+			Word:   "Tidak apa bersedih. Aku percaya padamu. Kamu bisa melewati ini. Kamu orang yang kuat🥹💪🏻",
 		},
+
+		// mood 4 -> lelah
 		{
 			ID:     uuid.New(),
-			MoodID: 3,
-			Word:   "Afirmation Word Angry 3",
+			MoodID: 4,
+			Word:   "Istirahatlah sejenak, gapapa kok. Tenangkan dirimu dulu, beri waktu untuk dirimu beristirahat. Kamu sudah bekerja keras hari ini🤗",
 		},
 		{
 			ID:     uuid.New(),
 			MoodID: 4,
-			Word:   "Afirmation Word Neutral 1",
+			Word:   "Wajar kok untuk merasa lelah. Beri dirimu waktu untuk beristirahat. Kamu sudah melakukan yang terbaik hari ini✨🤗",
 		},
 		{
 			ID:     uuid.New(),
 			MoodID: 4,
-			Word:   "Afirmation Word Neutral 2",
+			Word:   "Biarkan pikiranmu istirahat terlebih dahulu, percayalah bahwa esok akan menjadi hari yang lebih baik. Aku yakin kebahagiaan akan datang membayar semua kerja kerasmu🌈✨",
 		},
 		{
 			ID:     uuid.New(),
 			MoodID: 4,
-			Word:   "Afirmation Word Neutral 3",
+			Word:   "Jangan paksakan dirimu terlalu keras. Istirahat sejenak ya. Jangan lupa makan, tidur, dan jaga kesehatan. Karena kamu berharga😉✨",
+		},
+
+		// mood 5 -> marah
+		{
+			ID:     uuid.New(),
+			MoodID: 5,
+			Word: "Marah itu hal yang wajar kok. Tapi, jangan lupa untuk luangkan waktu untuk tenangkan diri sebelum berbicara atau bertindak ya..😉",
+		},
+		{
+			ID: uuid.New(),
+			MoodID: 5,
+			Word: "Aku yakin masalah yang kamu hadapi pasti berat hingga membuatmu marah. Tapi jangan terlalu lama ya, jangan lupa untuk tenangkan emosimu kembali sebelum melanjutkan aktivitasmu. Aku yakin kamu bisa menyelesaikan masalahmu dengan pikiran yang tenang😊",
 		},
 	}
 
