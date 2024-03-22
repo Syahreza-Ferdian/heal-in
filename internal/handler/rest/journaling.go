@@ -72,5 +72,10 @@ func (r *Rest) GetCurrentUserJournalingEntries(ctx *gin.Context) {
 		return
 	}
 
+	if entries == nil {
+		response.NotFound(ctx, http.StatusNotFound, "No journaling entries found")
+		return
+	}
+
 	response.OnSuccess(ctx, http.StatusOK, "Journaling entries retrieved", entries)
 }

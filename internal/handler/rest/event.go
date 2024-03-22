@@ -60,6 +60,11 @@ func (r *Rest) GetAllEvents(ctx *gin.Context) {
 		return
 	}
 
+	if len(events) == 0 {
+		response.NotFound(ctx, http.StatusNotFound, "no events found")
+		return
+	}
+
 	response.OnSuccess(ctx, http.StatusOK, "events found", events)
 }
 
@@ -103,7 +108,7 @@ func (r *Rest) GetUserEvents(ctx *gin.Context) {
 	}
 
 	if len(events) == 0 {
-		response.OnSuccess(ctx, http.StatusOK, "user has no joined event data", any("no event data found for this user"))
+		response.NotFound(ctx, http.StatusNotFound, "no user events found")
 		return
 	}
 

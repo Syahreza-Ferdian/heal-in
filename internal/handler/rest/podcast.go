@@ -57,6 +57,11 @@ func (r *Rest) GetAllPodcastsBasedOnUserStatus(ctx *gin.Context) {
 		return
 	}
 
+	if len(podcast) == 0 {
+		response.NotFound(ctx, http.StatusNotFound, "no podcast data found")
+		return
+	}
+
 	response.OnSuccess(ctx, http.StatusOK, "podcasts found", podcast)
 }
 
@@ -65,7 +70,7 @@ func (r *Rest) GetPodcastByID(ctx *gin.Context) {
 
 	podcast, err := r.service.PodcastService.GetPodcastByID(podcastID)
 	if err != nil {
-		response.OnFailed(ctx, http.StatusInternalServerError, "failed to get podcast", err)
+		response.OnFailed(ctx, http.StatusNotFound, "failed to get podcast", err)
 		return
 	}
 

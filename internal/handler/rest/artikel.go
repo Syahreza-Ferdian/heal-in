@@ -75,6 +75,11 @@ func (r *Rest) GetAllArtikel(ctx *gin.Context) {
 		return
 	}
 
+	if len(artikels) == 0 {
+		response.NotFound(ctx, http.StatusNotFound, "no artikel found")
+		return
+	}
+
 	response.OnSuccess(ctx, http.StatusOK, "artikel found", artikels)
 }
 
@@ -83,6 +88,11 @@ func (r *Rest) GetFewSampleArtikel(ctx *gin.Context) {
 
 	if err != nil {
 		response.OnFailed(ctx, http.StatusInternalServerError, "failed to get artikel", err)
+		return
+	}
+
+	if len(artikels) == 0 {
+		response.NotFound(ctx, http.StatusNotFound, "no artikel found")
 		return
 	}
 

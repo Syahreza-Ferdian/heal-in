@@ -71,6 +71,11 @@ func (r *Rest) GetAllVideos(ctx *gin.Context) {
 		return
 	}
 
+	if len(videos) == 0 {
+		response.NotFound(ctx, http.StatusNotFound, "no videos found")
+		return
+	}
+
 	response.OnSuccess(ctx, http.StatusOK, "videos found", videos)
 }
 
