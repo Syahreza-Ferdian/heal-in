@@ -186,12 +186,12 @@ func afirmationWordSeeder(db *gorm.DB) error {
 		{
 			ID:     uuid.New(),
 			MoodID: 5,
-			Word: "Marah itu hal yang wajar kok. Tapi, jangan lupa untuk luangkan waktu untuk tenangkan diri sebelum berbicara atau bertindak ya..😉",
+			Word:   "Marah itu hal yang wajar kok. Tapi, jangan lupa untuk luangkan waktu untuk tenangkan diri sebelum berbicara atau bertindak ya..😉",
 		},
 		{
-			ID: uuid.New(),
+			ID:     uuid.New(),
 			MoodID: 5,
-			Word: "Aku yakin masalah yang kamu hadapi pasti berat hingga membuatmu marah. Tapi jangan terlalu lama ya, jangan lupa untuk tenangkan emosimu kembali sebelum melanjutkan aktivitasmu. Aku yakin kamu bisa menyelesaikan masalahmu dengan pikiran yang tenang😊",
+			Word:   "Aku yakin masalah yang kamu hadapi pasti berat hingga membuatmu marah. Tapi jangan terlalu lama ya, jangan lupa untuk tenangkan emosimu kembali sebelum melanjutkan aktivitasmu. Aku yakin kamu bisa menyelesaikan masalahmu dengan pikiran yang tenang😊",
 		},
 	}
 
@@ -306,8 +306,16 @@ func videoSeeder(db *gorm.DB) error {
 		Link:        "https://lhchzzctoliiqnjoibcp.supabase.co/storage/v1/object/public/heal_in/Videos/How%20stress%20affects%20your%20brain.mp4",
 	}
 
+	video3 := entity.Video{
+		ID:          uuid.New(),
+		Title:       "Me Too - A Film About Mental Health",
+		Description: "Me Too is a short film that explores the impact of mental health on individuals and their loved ones. Through a series of interviews with people who have experienced mental health challenges, the film sheds light on the struggles and triumphs of those living with mental illness. By sharing their stories, the participants hope to raise awareness and reduce the stigma surrounding mental health issues. Me Too is a powerful reminder that we are not alone in our struggles and that there is hope for recovery and healing.",
+		Link:        "https://lhchzzctoliiqnjoibcp.supabase.co/storage/v1/object/public/heal_in/Videos/Me%20Too_A%20Film%20About%20Mental%20Health.mp4",
+	}
+
 	videos = append(videos, video1)
 	videos = append(videos, video2)
+	videos = append(videos, video3)
 
 	if err := db.CreateInBatches(&videos, len(videos)).Error; err != nil {
 		return err
@@ -326,7 +334,16 @@ func podcastSeeder(db *gorm.DB) error {
 		Thumbnail:   "https://lhchzzctoliiqnjoibcp.supabase.co/storage/v1/object/public/heal_in/Podcast/dan-meyers-hluOJZjLVXc-unsplash.jpg",
 	}
 
+	podcast2 := entity.Podcast{
+		ID:          uuid.New(),
+		Title:       "Merawat Kesehatan Mental Diri Sendiri",
+		Description: "Podcast ini membahas tentang pentingnya merawat kesehatan mental diri sendiri. Dalam podcast ini, kita akan membahas tentang berbagai cara untuk merawat kesehatan mental kita, mulai dari menjaga keseimbangan antara pekerjaan dan waktu luang, hingga mengelola stres dan kecemasan yang sering kita alami sehari-hari. Dengan mendengarkan podcast ini, diharapkan kita dapat belajar bagaimana merawat kesehatan mental kita dengan baik dan menciptakan kehidupan yang lebih seimbang dan bermakna.",
+		Link:        "https://lhchzzctoliiqnjoibcp.supabase.co/storage/v1/object/public/heal_in/Podcast/Cara%20Marshanda%20Merawat%20Kesehatan%20Mental%20Diri%20Sendiri.mp3",
+		Thumbnail:   "https://lhchzzctoliiqnjoibcp.supabase.co/storage/v1/object/public/heal_in/Podcast/maxresdefault.jpg",
+	}
+
 	podcasts = append(podcasts, podcast1)
+	podcasts = append(podcasts, podcast2)
 
 	if err := db.CreateInBatches(&podcasts, len(podcasts)).Error; err != nil {
 		return err
