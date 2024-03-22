@@ -1,7 +1,6 @@
 package rest
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/Syahreza-Ferdian/heal-in/entity"
@@ -47,7 +46,6 @@ func (r *Rest) NewPodcast(ctx *gin.Context) {
 func (r *Rest) GetAllPodcastsBasedOnUserStatus(ctx *gin.Context) {
 	currUser, ada := ctx.Get("user")
 	if !ada {
-		response.OnFailed(ctx, http.StatusUnauthorized, "user not found", fmt.Errorf("you need to logged in to access this feature"))
 		return
 	}
 

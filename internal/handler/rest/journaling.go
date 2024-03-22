@@ -1,7 +1,6 @@
 package rest
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/Syahreza-Ferdian/heal-in/entity"
@@ -14,7 +13,6 @@ func (r *Rest) NewJournalingEntry(ctx *gin.Context) {
 	currUser, ada := ctx.Get("user")
 
 	if !ada {
-		response.OnFailed(ctx, http.StatusUnauthorized, "Unauthorized", fmt.Errorf("you need to logged in to access this feature"))
 		return
 	}
 
@@ -63,7 +61,6 @@ func (r *Rest) GetCurrentUserJournalingEntries(ctx *gin.Context) {
 	currUser, ada := ctx.Get("user")
 
 	if !ada {
-		response.OnFailed(ctx, http.StatusUnauthorized, "Unauthorized", fmt.Errorf("you need to logged in to access this feature"))
 		return
 	}
 

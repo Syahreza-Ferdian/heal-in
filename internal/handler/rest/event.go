@@ -1,7 +1,6 @@
 package rest
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/Syahreza-Ferdian/heal-in/entity"
@@ -67,7 +66,6 @@ func (r *Rest) GetAllEvents(ctx *gin.Context) {
 func (r *Rest) EventPayment(ctx *gin.Context) {
 	currUser, ada := ctx.Get("user")
 	if !ada {
-		response.OnFailed(ctx, http.StatusUnauthorized, "unauthorized", fmt.Errorf("login needed"))
 		return
 	}
 
@@ -93,7 +91,6 @@ func (r *Rest) EventPayment(ctx *gin.Context) {
 func (r *Rest) GetUserEvents(ctx *gin.Context) {
 	currUser, ada := ctx.Get("user")
 	if !ada {
-		response.OnFailed(ctx, http.StatusUnauthorized, "unauthorized", fmt.Errorf("login needed"))
 		return
 	}
 

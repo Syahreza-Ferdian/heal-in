@@ -1,7 +1,6 @@
 package rest
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/Syahreza-Ferdian/heal-in/entity"
@@ -70,7 +69,6 @@ func (r *Rest) GetAllArtikel(ctx *gin.Context) {
 	var userID uuid.UUID
 
 	if !ada {
-		response.OnFailed(ctx, http.StatusUnauthorized, "failed to get user", fmt.Errorf("user not found"))
 		return
 	} else {
 		userID = currUser.(*entity.User).ID
